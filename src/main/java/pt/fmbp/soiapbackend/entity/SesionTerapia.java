@@ -1,4 +1,4 @@
-package pt.fmbp.soiapbackend.entities;
+package pt.fmbp.soiapbackend.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,9 +10,9 @@ import java.util.Objects;
 public class SesionTerapia implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_sesion", nullable = false, updatable = false)
-    private int idSesion;
+    private Long idSesion;
 
     @Column(name = "nro_sesion")
     private int nroSesion;
@@ -32,17 +32,16 @@ public class SesionTerapia implements Serializable {
 
     public SesionTerapia() { }
 
-    public SesionTerapia(int idSesion, int nroSesion, Date fechaSesion, String observaciones, String estado,
-                         FichaTratamiento fichaTratamiento) {
+    public SesionTerapia(Long idSesion, int nroSesion, Date fechaSesion, String observaciones, FichaTratamiento fichaTratamiento) {
         this.idSesion = idSesion;
         this.nroSesion = nroSesion;
         this.fechaSesion = fechaSesion;
         this.observaciones = observaciones;
-        this.estado = estado;
+        this.estado = "Activo";
         this.fichaTratamiento = fichaTratamiento;
     }
 
-    public int getIdSesion() {
+    public Long getIdSesion() {
         return idSesion;
     }
 
@@ -91,7 +90,7 @@ public class SesionTerapia implements Serializable {
         if (this == o) return true;
         if (!(o instanceof SesionTerapia)) return false;
         SesionTerapia that = (SesionTerapia) o;
-        return idSesion == that.idSesion && nroSesion == that.nroSesion && Objects.equals(fechaSesion, that.fechaSesion) && Objects.equals(observaciones, that.observaciones) && Objects.equals(estado, that.estado) && Objects.equals(fichaTratamiento, that.fichaTratamiento);
+        return nroSesion == that.nroSesion && Objects.equals(idSesion, that.idSesion) && Objects.equals(fechaSesion, that.fechaSesion) && Objects.equals(observaciones, that.observaciones) && Objects.equals(estado, that.estado) && Objects.equals(fichaTratamiento, that.fichaTratamiento);
     }
 
     @Override

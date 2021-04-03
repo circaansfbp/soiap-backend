@@ -1,9 +1,10 @@
-package pt.fmbp.soiapbackend.entities;
+package pt.fmbp.soiapbackend.entity;
 
 import javax.persistence.*;
-import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -11,9 +12,9 @@ import java.util.Objects;
 public class Pago implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pago", nullable = false, updatable = false)
-    private int idPago;
+    private Long idPago;
 
     @Column(name = "estado_pago", nullable = false)
     private boolean estadoPago;
@@ -34,19 +35,23 @@ public class Pago implements Serializable {
     @Column(nullable = false)
     private String estado;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pago", cascade = CascadeType.ALL)
+    private List<HoraAtencion> pagosPorHoraAtencion;
+
     public Pago() { }
 
-    public Pago(int idPago, boolean estadoPago, Date fechaPago, String medioPago, String montoPago, int cantidadHorasPagadas, String estado) {
+    public Pago(Long idPago, boolean estadoPago, Date fechaPago, String medioPago, String montoPago, int cantidadHorasPagadas) {
         this.idPago = idPago;
         this.estadoPago = estadoPago;
         this.fechaPago = fechaPago;
         this.medioPago = medioPago;
         this.montoPago = montoPago;
         this.cantidadHorasPagadas = cantidadHorasPagadas;
-        this.estado = estado;
+        this.estado = "Activo";
+        this.pagosPorHoraAtencion = new ArrayList<>();
     }
 
-    public int getIdPago() {
+    public Long getIdPago() {
         return idPago;
     }
 
@@ -98,17 +103,25 @@ public class Pago implements Serializable {
         this.estado = estado;
     }
 
+    public List<HoraAtencion> getPagosPorHoraAtencion() {
+        return pagosPorHoraAtencion;
+    }
+
+    public void setPagosPorHoraAtencion(List<HoraAtencion> pagosPorHoraAtencion) {
+        this.pagosPorHoraAtencion = pagosPorHoraAtencion;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Pago)) return false;
         Pago pago = (Pago) o;
-        return idPago == pago.idPago && estadoPago == pago.estadoPago && cantidadHorasPagadas == pago.cantidadHorasPagadas && Objects.equals(fechaPago, pago.fechaPago) && Objects.equals(medioPago, pago.medioPago) && Objects.equals(montoPago, pago.montoPago) && Objects.equals(estado, pago.estado);
+        return estadoPago == pago.estadoPago && cantidadHorasPagadas == pago.cantidadHorasPagadas && Objects.equals(idPago, pago.idPago) && Objects.equals(fechaPago, pago.fechaPago) && Objects.equals(medioPago, pago.medioPago) && Objects.equals(montoPago, pago.montoPago) && Objects.equals(estado, pago.estado) && Objects.equals(pagosPorHoraAtencion, pago.pagosPorHoraAtencion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idPago, estadoPago, fechaPago, medioPago, montoPago, cantidadHorasPagadas, estado);
+        return Objects.hash(idPago, estadoPago, fechaPago, medioPago, montoPago, cantidadHorasPagadas, estado, pagosPorHoraAtencion);
     }
 
     @Override
@@ -121,6 +134,7 @@ public class Pago implements Serializable {
                 ", montoPago='" + montoPago + '\'' +
                 ", cantidadHorasPagadas=" + cantidadHorasPagadas +
                 ", estado='" + estado + '\'' +
+                ", pagosPorHoraAtencion=" + pagosPorHoraAtencion +
                 '}';
     }
 }

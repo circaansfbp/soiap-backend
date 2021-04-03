@@ -1,4 +1,6 @@
-package pt.fmbp.soiapbackend.entities;
+package pt.fmbp.soiapbackend.entity;
+
+import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,17 +13,17 @@ import java.util.Objects;
 public class HoraAtencion implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_atencion", nullable = false, updatable = false)
-    private int idAtencion;
+    private Long idAtencion;
 
     private boolean asistencia;
 
     @Column(name = "confirma_asistencia")
     private boolean confirmaAsistencia;
 
-    @Column(name = "hora_atencion", nullable = false)
-    //@Temporal(value = TemporalType.TIME)
+    @Column(name = "hora_atencion")
+    @NotNull
     private LocalTime horaAtencion;
 
     @Column(name = "fecha_atencion", nullable = false)
@@ -47,8 +49,8 @@ public class HoraAtencion implements Serializable {
 
     public HoraAtencion() { }
 
-    public HoraAtencion(int idAtencion, boolean asistencia, boolean confirmaAsistencia, LocalTime horaAtencion, Date fechaAtencion,
-                        int nroConsulta, boolean disponible, String estado, Paciente paciente, Pago pago) {
+    public HoraAtencion(Long idAtencion, boolean asistencia, boolean confirmaAsistencia, LocalTime horaAtencion, Date fechaAtencion,
+                        int nroConsulta, boolean disponible, Paciente paciente, Pago pago) {
         this.idAtencion = idAtencion;
         this.asistencia = asistencia;
         this.confirmaAsistencia = confirmaAsistencia;
@@ -56,12 +58,12 @@ public class HoraAtencion implements Serializable {
         this.fechaAtencion = fechaAtencion;
         this.nroConsulta = nroConsulta;
         this.disponible = disponible;
-        this.estado = estado;
+        this.estado = "Activo";
         this.paciente = paciente;
         this.pago = pago;
     }
 
-    public int getIdAtencion() {
+    public Long getIdAtencion() {
         return idAtencion;
     }
 
@@ -142,7 +144,7 @@ public class HoraAtencion implements Serializable {
         if (this == o) return true;
         if (!(o instanceof HoraAtencion)) return false;
         HoraAtencion that = (HoraAtencion) o;
-        return idAtencion == that.idAtencion && asistencia == that.asistencia && confirmaAsistencia == that.confirmaAsistencia && nroConsulta == that.nroConsulta && disponible == that.disponible && Objects.equals(horaAtencion, that.horaAtencion) && Objects.equals(fechaAtencion, that.fechaAtencion) && Objects.equals(estado, that.estado) && Objects.equals(paciente, that.paciente) && Objects.equals(pago, that.pago);
+        return asistencia == that.asistencia && confirmaAsistencia == that.confirmaAsistencia && nroConsulta == that.nroConsulta && disponible == that.disponible && Objects.equals(idAtencion, that.idAtencion) && Objects.equals(horaAtencion, that.horaAtencion) && Objects.equals(fechaAtencion, that.fechaAtencion) && Objects.equals(estado, that.estado) && Objects.equals(paciente, that.paciente) && Objects.equals(pago, that.pago);
     }
 
     @Override

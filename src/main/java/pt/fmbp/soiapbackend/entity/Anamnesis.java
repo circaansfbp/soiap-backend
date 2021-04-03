@@ -1,4 +1,4 @@
-package pt.fmbp.soiapbackend.entities;
+package pt.fmbp.soiapbackend.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,9 +10,9 @@ import java.util.Objects;
 public class Anamnesis implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_anamnesis", nullable = false, updatable = false)
-    private int idAnamnesis;
+    private Long idAnamnesis;
 
     @Temporal(value = TemporalType.DATE)
     private Date fecha;
@@ -33,18 +33,18 @@ public class Anamnesis implements Serializable {
 
     public Anamnesis() { }
 
-    public Anamnesis(int idAnamnesis, Date fecha, String motivoConsultaPaciente, String antecedentesPaciente, String antecedentesFamiliares,
-                     String observaciones, String estado) {
+    public Anamnesis(Long idAnamnesis, Date fecha, String motivoConsultaPaciente, String antecedentesPaciente,
+                     String antecedentesFamiliares, String observaciones) {
         this.idAnamnesis = idAnamnesis;
         this.fecha = fecha;
         this.motivoConsultaPaciente = motivoConsultaPaciente;
         this.antecedentesPaciente = antecedentesPaciente;
         this.antecedentesFamiliares = antecedentesFamiliares;
         this.observaciones = observaciones;
-        this.estado = estado;
+        this.estado = "Activo";
     }
 
-    public int getIdAnamnesis() {
+    public Long getIdAnamnesis() {
         return idAnamnesis;
     }
 
@@ -101,7 +101,7 @@ public class Anamnesis implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Anamnesis)) return false;
         Anamnesis anamnesis = (Anamnesis) o;
-        return idAnamnesis == anamnesis.idAnamnesis && Objects.equals(fecha, anamnesis.fecha) && Objects.equals(motivoConsultaPaciente, anamnesis.motivoConsultaPaciente) && Objects.equals(antecedentesPaciente, anamnesis.antecedentesPaciente) && Objects.equals(antecedentesFamiliares, anamnesis.antecedentesFamiliares) && Objects.equals(observaciones, anamnesis.observaciones) && Objects.equals(estado, anamnesis.estado);
+        return Objects.equals(idAnamnesis, anamnesis.idAnamnesis) && Objects.equals(fecha, anamnesis.fecha) && Objects.equals(motivoConsultaPaciente, anamnesis.motivoConsultaPaciente) && Objects.equals(antecedentesPaciente, anamnesis.antecedentesPaciente) && Objects.equals(antecedentesFamiliares, anamnesis.antecedentesFamiliares) && Objects.equals(observaciones, anamnesis.observaciones) && Objects.equals(estado, anamnesis.estado);
     }
 
     @Override

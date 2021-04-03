@@ -1,8 +1,10 @@
-package pt.fmbp.soiapbackend.entities;
+package pt.fmbp.soiapbackend.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -36,6 +38,9 @@ public class Paciente implements Serializable {
     @Column(nullable = false)
     private String estado;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "paciente", cascade = CascadeType.ALL)
+    private List<HoraAtencion> atenciones;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ficha")
     private FichaTratamiento fichaTratamiento;
@@ -47,7 +52,7 @@ public class Paciente implements Serializable {
     public Paciente() { }
 
     public Paciente(String telefono, String nombreCompleto, Date fechaNacimiento, String ocupacion, String institucion,
-                    String afiliacionSalud, String estadoCivil, String familiaNuclear, String estado,
+                    String afiliacionSalud, String estadoCivil, String familiaNuclear,
                     FichaTratamiento fichaTratamiento, Anamnesis anamnesis) {
         this.telefono = telefono;
         this.nombreCompleto = nombreCompleto;
@@ -57,7 +62,8 @@ public class Paciente implements Serializable {
         this.afiliacionSalud = afiliacionSalud;
         this.estadoCivil = estadoCivil;
         this.familiaNuclear = familiaNuclear;
-        this.estado = estado;
+        this.estado = "Activo";
+        this.atenciones = new ArrayList<>();
         this.fichaTratamiento = fichaTratamiento;
         this.anamnesis = anamnesis;
     }
@@ -134,6 +140,14 @@ public class Paciente implements Serializable {
         this.estado = estado;
     }
 
+    public List<HoraAtencion> getAtenciones() {
+        return atenciones;
+    }
+
+    public void setAtenciones(List<HoraAtencion> atenciones) {
+        this.atenciones = atenciones;
+    }
+
     public FichaTratamiento getFichaTratamiento() {
         return fichaTratamiento;
     }
@@ -155,12 +169,12 @@ public class Paciente implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Paciente)) return false;
         Paciente paciente = (Paciente) o;
-        return Objects.equals(telefono, paciente.telefono) && Objects.equals(nombreCompleto, paciente.nombreCompleto) && Objects.equals(fechaNacimiento, paciente.fechaNacimiento) && Objects.equals(ocupacion, paciente.ocupacion) && Objects.equals(institucion, paciente.institucion) && Objects.equals(afiliacionSalud, paciente.afiliacionSalud) && Objects.equals(estadoCivil, paciente.estadoCivil) && Objects.equals(familiaNuclear, paciente.familiaNuclear) && Objects.equals(estado, paciente.estado) && Objects.equals(fichaTratamiento, paciente.fichaTratamiento) && Objects.equals(anamnesis, paciente.anamnesis);
+        return Objects.equals(telefono, paciente.telefono) && Objects.equals(nombreCompleto, paciente.nombreCompleto) && Objects.equals(fechaNacimiento, paciente.fechaNacimiento) && Objects.equals(ocupacion, paciente.ocupacion) && Objects.equals(institucion, paciente.institucion) && Objects.equals(afiliacionSalud, paciente.afiliacionSalud) && Objects.equals(estadoCivil, paciente.estadoCivil) && Objects.equals(familiaNuclear, paciente.familiaNuclear) && Objects.equals(estado, paciente.estado) && Objects.equals(atenciones, paciente.atenciones) && Objects.equals(fichaTratamiento, paciente.fichaTratamiento) && Objects.equals(anamnesis, paciente.anamnesis);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(telefono, nombreCompleto, fechaNacimiento, ocupacion, institucion, afiliacionSalud, estadoCivil, familiaNuclear, estado, fichaTratamiento, anamnesis);
+        return Objects.hash(telefono, nombreCompleto, fechaNacimiento, ocupacion, institucion, afiliacionSalud, estadoCivil, familiaNuclear, estado, atenciones, fichaTratamiento, anamnesis);
     }
 
     @Override
@@ -175,6 +189,7 @@ public class Paciente implements Serializable {
                 ", estadoCivil='" + estadoCivil + '\'' +
                 ", familiaNuclear='" + familiaNuclear + '\'' +
                 ", estado='" + estado + '\'' +
+                ", atenciones=" + atenciones +
                 ", fichaTratamiento=" + fichaTratamiento +
                 ", anamnesis=" + anamnesis +
                 '}';
