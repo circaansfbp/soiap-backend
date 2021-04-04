@@ -13,6 +13,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Paciente")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "atenciones"})
 public class Paciente implements Serializable {
 
     // REALIZAR VALIDACIONES DE CAMPOS QUE NO DEBEN SER NULOS
@@ -44,6 +45,7 @@ public class Paciente implements Serializable {
     @Column(nullable = false)
     private String estado;
 
+    // PENDIENTE AGREGAR LA HORA DE ATENCIÓN A ESTA LISTA CUANDO SE CREA UN NUEVO HORARIO DE ATENCIÓN
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "paciente", cascade = CascadeType.ALL)
     private List<HoraAtencion> atenciones;
 
@@ -56,6 +58,8 @@ public class Paciente implements Serializable {
     @JoinColumn(name = "id_anamnesis")
     @NotFound(action = NotFoundAction.IGNORE)
     private Anamnesis anamnesis;
+
+    public Paciente () { }
 
     public Paciente(String telefono) { this.telefono = telefono; }
 

@@ -1,6 +1,5 @@
 package pt.fmbp.soiapbackend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -63,6 +62,7 @@ public class HoraAtencion implements Serializable {
         this.pago = pago;
     }
 
+    // ARREGLAR PERSISTENCIA DEL ESTADO Y LA DISPONIBILIDAD AL BORRAR UN REGISTRO
     @PrePersist
     private void prePersist () {
         this.estado = "Activo";
