@@ -1,5 +1,9 @@
 package pt.fmbp.soiapbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,14 +15,16 @@ import java.util.Objects;
 @Table(name = "Paciente")
 public class Paciente implements Serializable {
 
+    // REALIZAR VALIDACIONES DE CAMPOS QUE NO DEBEN SER NULOS
+
     @Id
     @Column(nullable = false)
     private String telefono;
 
-    @Column(name = "nombre_completo", nullable = false)
+    @Column(name = "nombre_completo")
     private String nombreCompleto;
 
-    @Column(name = "fecha_nacimiento", nullable = false)
+    @Column(name = "fecha_nacimiento")
     @Temporal(value = TemporalType.DATE)
     private Date fechaNacimiento;
 
@@ -26,7 +32,7 @@ public class Paciente implements Serializable {
 
     private String institucion;
 
-    @Column(name = "afiliacion_salud", nullable = false)
+    @Column(name = "afiliacion_salud")
     private String afiliacionSalud;
 
     @Column(name = "estado_civil")
@@ -43,13 +49,15 @@ public class Paciente implements Serializable {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ficha")
+    @NotFound(action = NotFoundAction.IGNORE)
     private FichaTratamiento fichaTratamiento;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_anamnesis")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Anamnesis anamnesis;
 
-    public Paciente() { }
+    public Paciente(String telefono) { this.telefono = telefono; }
 
     public Paciente(String telefono, String nombreCompleto, Date fechaNacimiento, String ocupacion, String institucion,
                     String afiliacionSalud, String estadoCivil, String familiaNuclear,
@@ -62,10 +70,14 @@ public class Paciente implements Serializable {
         this.afiliacionSalud = afiliacionSalud;
         this.estadoCivil = estadoCivil;
         this.familiaNuclear = familiaNuclear;
-        this.estado = "Activo";
         this.atenciones = new ArrayList<>();
         this.fichaTratamiento = fichaTratamiento;
         this.anamnesis = anamnesis;
+    }
+
+    @PrePersist
+    private void PrePersist () {
+        this.estado = "Activo";
     }
 
     public String getTelefono() {

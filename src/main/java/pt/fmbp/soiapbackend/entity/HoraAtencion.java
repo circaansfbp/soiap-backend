@@ -1,5 +1,6 @@
 package pt.fmbp.soiapbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -39,11 +40,11 @@ public class HoraAtencion implements Serializable {
     @Column(nullable = false)
     private String estado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "telefono_paciente")
     private Paciente paciente;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pago")
     private Pago pago;
 
@@ -58,9 +59,14 @@ public class HoraAtencion implements Serializable {
         this.fechaAtencion = fechaAtencion;
         this.nroConsulta = nroConsulta;
         this.disponible = disponible;
-        this.estado = "Activo";
         this.paciente = paciente;
         this.pago = pago;
+    }
+
+    @PrePersist
+    private void prePersist () {
+        this.estado = "Activo";
+        this.disponible = false;
     }
 
     public Long getIdAtencion() {
