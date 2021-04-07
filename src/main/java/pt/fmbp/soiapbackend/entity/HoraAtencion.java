@@ -40,7 +40,7 @@ public class HoraAtencion implements Serializable {
     private String estado;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "telefono_paciente")
+    @JoinColumn(name = "id_paciente")
     private Paciente paciente;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

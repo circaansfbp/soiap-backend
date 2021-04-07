@@ -21,7 +21,7 @@ public class HoraAtencionController {
 
     // Crear un nuevo horario de atención
     @PostMapping("/atenciones")
-    public ResponseEntity<HoraAtencion> createHoraAtencion(@RequestBody HoraAtencion horaAtencion) {
+    public ResponseEntity<HoraAtencion> createHoraAtencion (@RequestBody HoraAtencion horaAtencion) {
         HoraAtencion horaAtencionCreada = horaAtencionService.saveHoraAtencion(horaAtencion);
 
         return new ResponseEntity<>(horaAtencionCreada, HttpStatus.CREATED);

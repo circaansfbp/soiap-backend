@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import javax.annotation.processing.Generated;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,11 +20,15 @@ public class Paciente implements Serializable {
     // REALIZAR VALIDACIONES DE CAMPOS QUE NO DEBEN SER NULOS
 
     @Id
-    @Column(nullable = false)
-    private String telefono;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_paciente", nullable = false, updatable = false)
+    private Long idPaciente;
 
-    @Column(name = "nombre_completo")
-    private String nombreCompleto;
+    private String nombre;
+
+    private String apellido;
+
+    private String telefono;
 
     @Column(name = "fecha_nacimiento")
     @Temporal(value = TemporalType.DATE)
@@ -61,20 +66,21 @@ public class Paciente implements Serializable {
 
     public Paciente () { }
 
-    public Paciente(String telefono) { this.telefono = telefono; }
-
-    public Paciente(String telefono, String nombreCompleto, Date fechaNacimiento, String ocupacion, String institucion,
-                    String afiliacionSalud, String estadoCivil, String familiaNuclear,
-                    FichaTratamiento fichaTratamiento, Anamnesis anamnesis) {
+    public Paciente(Long idPaciente, String nombre, String apellido, String telefono, Date fechaNacimiento,
+                    String ocupacion, String institucion, String afiliacionSalud, String estadoCivil, String familiaNuclear,
+                    String estado, List<HoraAtencion> atenciones, FichaTratamiento fichaTratamiento, Anamnesis anamnesis) {
+        this.idPaciente = idPaciente;
+        this.nombre = nombre;
+        this.apellido = apellido;
         this.telefono = telefono;
-        this.nombreCompleto = nombreCompleto;
         this.fechaNacimiento = fechaNacimiento;
         this.ocupacion = ocupacion;
         this.institucion = institucion;
         this.afiliacionSalud = afiliacionSalud;
         this.estadoCivil = estadoCivil;
         this.familiaNuclear = familiaNuclear;
-        this.atenciones = new ArrayList<>();
+        this.estado = estado;
+        this.atenciones = atenciones;
         this.fichaTratamiento = fichaTratamiento;
         this.anamnesis = anamnesis;
     }
@@ -84,20 +90,32 @@ public class Paciente implements Serializable {
         this.estado = "Activo";
     }
 
+    public Long getIdPaciente() {
+        return idPaciente;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
     public String getTelefono() {
         return telefono;
     }
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public String getNombreCompleto() {
-        return nombreCompleto;
-    }
-
-    public void setNombreCompleto(String nombreCompleto) {
-        this.nombreCompleto = nombreCompleto;
     }
 
     public Date getFechaNacimiento() {
@@ -185,19 +203,21 @@ public class Paciente implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Paciente)) return false;
         Paciente paciente = (Paciente) o;
-        return Objects.equals(telefono, paciente.telefono) && Objects.equals(nombreCompleto, paciente.nombreCompleto) && Objects.equals(fechaNacimiento, paciente.fechaNacimiento) && Objects.equals(ocupacion, paciente.ocupacion) && Objects.equals(institucion, paciente.institucion) && Objects.equals(afiliacionSalud, paciente.afiliacionSalud) && Objects.equals(estadoCivil, paciente.estadoCivil) && Objects.equals(familiaNuclear, paciente.familiaNuclear) && Objects.equals(estado, paciente.estado) && Objects.equals(atenciones, paciente.atenciones) && Objects.equals(fichaTratamiento, paciente.fichaTratamiento) && Objects.equals(anamnesis, paciente.anamnesis);
+        return Objects.equals(idPaciente, paciente.idPaciente) && Objects.equals(nombre, paciente.nombre) && Objects.equals(apellido, paciente.apellido) && Objects.equals(telefono, paciente.telefono) && Objects.equals(fechaNacimiento, paciente.fechaNacimiento) && Objects.equals(ocupacion, paciente.ocupacion) && Objects.equals(institucion, paciente.institucion) && Objects.equals(afiliacionSalud, paciente.afiliacionSalud) && Objects.equals(estadoCivil, paciente.estadoCivil) && Objects.equals(familiaNuclear, paciente.familiaNuclear) && Objects.equals(estado, paciente.estado) && Objects.equals(atenciones, paciente.atenciones) && Objects.equals(fichaTratamiento, paciente.fichaTratamiento) && Objects.equals(anamnesis, paciente.anamnesis);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(telefono, nombreCompleto, fechaNacimiento, ocupacion, institucion, afiliacionSalud, estadoCivil, familiaNuclear, estado, atenciones, fichaTratamiento, anamnesis);
+        return Objects.hash(idPaciente, nombre, apellido, telefono, fechaNacimiento, ocupacion, institucion, afiliacionSalud, estadoCivil, familiaNuclear, estado, atenciones, fichaTratamiento, anamnesis);
     }
 
     @Override
     public String toString() {
         return "Paciente{" +
-                "telefono='" + telefono + '\'' +
-                ", nombreCompleto='" + nombreCompleto + '\'' +
+                "idPaciente=" + idPaciente +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", telefono='" + telefono + '\'' +
                 ", fechaNacimiento=" + fechaNacimiento +
                 ", ocupacion='" + ocupacion + '\'' +
                 ", institucion='" + institucion + '\'' +
