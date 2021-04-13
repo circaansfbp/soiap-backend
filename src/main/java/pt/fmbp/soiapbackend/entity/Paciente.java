@@ -64,7 +64,7 @@ public class Paciente implements Serializable {
     @NotFound(action = NotFoundAction.IGNORE)
     private Anamnesis anamnesis;
 
-    public Paciente () { }
+    public Paciente () { this.atenciones = new ArrayList<>(); }
 
     public Paciente(Long idPaciente, String nombre, String apellido, String telefono, Date fechaNacimiento,
                     String ocupacion, String institucion, String afiliacionSalud, String estadoCivil, String familiaNuclear,
@@ -80,7 +80,7 @@ public class Paciente implements Serializable {
         this.estadoCivil = estadoCivil;
         this.familiaNuclear = familiaNuclear;
         this.estado = estado;
-        this.atenciones = atenciones;
+        this.atenciones = new ArrayList<>();
         this.fichaTratamiento = fichaTratamiento;
         this.anamnesis = anamnesis;
     }

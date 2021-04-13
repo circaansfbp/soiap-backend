@@ -1,5 +1,6 @@
 package pt.fmbp.soiapbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
@@ -36,10 +37,7 @@ public class HoraAtencion implements Serializable {
     @Column(nullable = false)
     private boolean disponible;
 
-    @Column(nullable = false)
-    private String estado;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "id_paciente")
     private Paciente paciente;
 
@@ -65,7 +63,6 @@ public class HoraAtencion implements Serializable {
     // ARREGLAR PERSISTENCIA DEL ESTADO Y LA DISPONIBILIDAD AL BORRAR UN REGISTRO
     @PrePersist
     private void prePersist () {
-        this.estado = "Activo";
         this.disponible = false;
     }
 
@@ -121,14 +118,6 @@ public class HoraAtencion implements Serializable {
         this.disponible = disponible;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public Paciente getPaciente() {
         return paciente;
     }
@@ -150,12 +139,12 @@ public class HoraAtencion implements Serializable {
         if (this == o) return true;
         if (!(o instanceof HoraAtencion)) return false;
         HoraAtencion that = (HoraAtencion) o;
-        return asistencia == that.asistencia && confirmaAsistencia == that.confirmaAsistencia && nroConsulta == that.nroConsulta && disponible == that.disponible && Objects.equals(idAtencion, that.idAtencion) && Objects.equals(horaAtencion, that.horaAtencion) && Objects.equals(fechaAtencion, that.fechaAtencion) && Objects.equals(estado, that.estado) && Objects.equals(paciente, that.paciente) && Objects.equals(pago, that.pago);
+        return asistencia == that.asistencia && confirmaAsistencia == that.confirmaAsistencia && nroConsulta == that.nroConsulta && disponible == that.disponible && Objects.equals(idAtencion, that.idAtencion) && Objects.equals(horaAtencion, that.horaAtencion) && Objects.equals(fechaAtencion, that.fechaAtencion) && Objects.equals(paciente, that.paciente) && Objects.equals(pago, that.pago);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idAtencion, asistencia, confirmaAsistencia, horaAtencion, fechaAtencion, nroConsulta, disponible, estado, paciente, pago);
+        return Objects.hash(idAtencion, asistencia, confirmaAsistencia, horaAtencion, fechaAtencion, nroConsulta, disponible, paciente, pago);
     }
 
     @Override
@@ -168,7 +157,6 @@ public class HoraAtencion implements Serializable {
                 ", fechaAtencion=" + fechaAtencion +
                 ", nroConsulta=" + nroConsulta +
                 ", disponible=" + disponible +
-                ", estado='" + estado + '\'' +
                 ", paciente=" + paciente +
                 ", pago=" + pago +
                 '}';

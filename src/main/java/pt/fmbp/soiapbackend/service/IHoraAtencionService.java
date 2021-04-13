@@ -9,10 +9,12 @@ public interface IHoraAtencionService {
 
     HoraAtencion saveHoraAtencion(HoraAtencion horaAtencion);
 
+    HoraAtencion getHoraAtencion(Long idAtencion);
+
     List<HoraAtencion> getHorasPorFecha(Date fechaAtencion);
 
     HoraAtencion updateHoraAtencion (HoraAtencion horaAtencion, Long idAtencion);
 
-    HoraAtencion deleteHoraAtencion (Long idAtencion);
+    void deleteHoraAtencion (Long idAtencion);
 
 }

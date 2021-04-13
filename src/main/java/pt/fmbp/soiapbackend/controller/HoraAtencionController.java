@@ -13,23 +13,34 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/atenciones")
 public class HoraAtencionController {
 
     @Autowired
     private IHoraAtencionService horaAtencionService;
 
     // Crear un nuevo horario de atención
-    @PostMapping("/atenciones")
+    @PostMapping("")
     public ResponseEntity<HoraAtencion> createHoraAtencion (@RequestBody HoraAtencion horaAtencion) {
         HoraAtencion horaAtencionCreada = horaAtencionService.saveHoraAtencion(horaAtencion);
 
         return new ResponseEntity<>(horaAtencionCreada, HttpStatus.CREATED);
     }
 
+    // Obtener un horario de atención específico
+    @GetMapping("/{idAtencion}")
+    public ResponseEntity<HoraAtencion> getHoraAtencion (@PathVariable(value = "idAtencion") Long idAtencion) {
+        HoraAtencion horaAtencionEncontrada = horaAtencionService.getHoraAtencion(idAtencion);
+
+        if (horaAtencionEncontrada != null) {
+            return new ResponseEntity<>(horaAtencionEncontrada, HttpStatus.OK);
+        }
+         else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     // Obtener horarios de atención por fecha
     // MANEJAR EXCEPCIÓN
-    @GetMapping("/atenciones/get/{fecha}")
+    @GetMapping("/get/{fecha}")
     public ResponseEntity<List<HoraAtencion>> getHoraAtencionPorFecha(@PathVariable(value = "fecha") String fechaAtencion)
             throws ParseException {
         Date date = new SimpleDateFormat("yyyy-MM-dd").parse(fechaAtencion);
@@ -39,23 +50,20 @@ public class HoraAtencionController {
     }
 
     // Actualizar una hora de atención
-    @PutMapping("/atenciones/update/{idAtencion}")
+    @PutMapping("/update/{idAtencion}")
     public ResponseEntity<HoraAtencion> updateHoraAtencion (@RequestBody HoraAtencion horaAtencion,
                                                             @PathVariable(value = "idAtencion") Long idAtencion) {
         HoraAtencion horaAtencionActualizada = horaAtencionService.updateHoraAtencion(horaAtencion, idAtencion);
 
         if (horaAtencionActualizada == null ) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else
-            return new ResponseEntity<>(horaAtencionActualizada, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(horaAtencionActualizada, HttpStatus.CREATED);
     }
 
-    // Eliminar una hora de atención
-    @PutMapping("/atenciones/delete/{idAtencion}")
-    public ResponseEntity<HoraAtencion> deleteHoraAtencion (@PathVariable(value = "idAtencion") Long idAtencion) {
-        HoraAtencion horaAtencionEliminada = horaAtencionService.deleteHoraAtencion(idAtencion);
-
-        if (horaAtencionEliminada == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        else
-            return new ResponseEntity<>(horaAtencionEliminada, HttpStatus.ACCEPTED);
+    // Eliminación física de una hora de atención
+    @DeleteMapping("/delete/{idAtencion}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteHoraAtencion (@PathVariable(value = "idAtencion") Long idAtencion) {
+        horaAtencionService.deleteHoraAtencion(idAtencion);
     }
 }

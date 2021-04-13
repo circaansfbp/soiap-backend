@@ -20,9 +20,15 @@ public class HoraAtencionService implements IHoraAtencionService {
     @Override
     @Transactional
     public HoraAtencion saveHoraAtencion(HoraAtencion horaAtencion) {
-        horaAtencion.setEstado("Activo");
         horaAtencion.setDisponible(false);
         return horaAtencionRepository.save(horaAtencion);
+    }
+
+    // Obtener un horario de atención específico
+    @Override
+    @Transactional
+    public HoraAtencion getHoraAtencion(Long idAtencion) {
+        return horaAtencionRepository.findById(idAtencion).orElse(null);
     }
 
     // Obtener horarios de atencion por una fecha determinada
@@ -36,7 +42,7 @@ public class HoraAtencionService implements IHoraAtencionService {
     @Override
     @Transactional
     public HoraAtencion updateHoraAtencion (HoraAtencion horaAtencion, Long idAtencion) {
-        HoraAtencion hourToUpdate = horaAtencionRepository.findById(idAtencion).orElse(null);
+        HoraAtencion hourToUpdate = getHoraAtencion(idAtencion);
 
         try {
             // Actualiza asistencia
@@ -70,18 +76,9 @@ public class HoraAtencionService implements IHoraAtencionService {
         catch (NullPointerException e) { return null; }
     }
 
-    // Eliminar una hora de atención
+    // Eliminar una hora de atención (ELIMINACIÓN FÍSICA)
     @Override
-    public HoraAtencion deleteHoraAtencion(Long idAtencion) {
-        HoraAtencion hourToDelete = horaAtencionRepository.findById(idAtencion).orElse(null);
-
-        try {
-            hourToDelete.setEstado("Inactivo");
-            hourToDelete.setDisponible(true);
-
-            horaAtencionRepository.save(hourToDelete);
-            return hourToDelete;
-        }
-        catch (NullPointerException e) { return null; }
+    public void deleteHoraAtencion(Long idAtencion) {
+        horaAtencionRepository.deleteById(idAtencion);
     }
 }

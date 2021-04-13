@@ -5,4 +5,4 @@ import org.springframework.stereotype.Repository;
 import pt.fmbp.soiapbackend.entity.Paciente;
 
 @Repository
-public interface IPacienteRepository extends JpaRepository<Paciente, String> { }
+public interface IPacienteRepository extends JpaRepository<Paciente, Long> { }
