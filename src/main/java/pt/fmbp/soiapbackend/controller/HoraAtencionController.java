@@ -22,9 +22,11 @@ public class HoraAtencionController {
     // Crear un nuevo horario de atención
     @PostMapping("")
     public ResponseEntity<HoraAtencion> createHoraAtencion (@RequestBody HoraAtencion horaAtencion) {
-        HoraAtencion horaAtencionCreada = horaAtencionService.saveHoraAtencion(horaAtencion);
-
-        return new ResponseEntity<>(horaAtencionCreada, HttpStatus.CREATED);
+        if (horaAtencion != null) {
+            HoraAtencion horaAtencionCreada = horaAtencionService.saveHoraAtencion(horaAtencion);
+            return new ResponseEntity<>(horaAtencionCreada, HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     // Obtener un horario de atención específico

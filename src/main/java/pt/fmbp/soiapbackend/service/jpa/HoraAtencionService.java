@@ -20,7 +20,7 @@ public class HoraAtencionService implements IHoraAtencionService {
     @Override
     @Transactional
     public HoraAtencion saveHoraAtencion(HoraAtencion horaAtencion) {
-        horaAtencion.setDisponible(false);
+        // horaAtencion.setDisponible(false);
         return horaAtencionRepository.save(horaAtencion);
     }
 
