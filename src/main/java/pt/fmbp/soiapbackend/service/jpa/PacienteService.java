@@ -1,6 +1,8 @@
 package pt.fmbp.soiapbackend.service.jpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.fmbp.soiapbackend.entity.Paciente;
@@ -15,13 +17,6 @@ public class PacienteService implements IPacienteService {
     @Autowired
     private IPacienteRepository pacienteRepository;
 
-    // Obtener un paciente específico por su ID
-    @Override
-    @Transactional(readOnly = true)
-    public Paciente getPacienteById(Long idPaciente) {
-        return pacienteRepository.findById(idPaciente).orElse(null);
-    }
-
     // Guardar un nuevo paciente
     @Override
     @Transactional
@@ -31,6 +26,13 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
+    // Obtener un paciente específico por su ID
+    @Override
+    @Transactional(readOnly = true)
+    public Paciente getPacienteById(Long idPaciente) {
+        return pacienteRepository.findById(idPaciente).orElse(null);
+    }
+
     // Obtener uno o más pacientes por un nombre
     @Override
     @Transactional(readOnly = true)
@@ -38,6 +40,13 @@ public class PacienteService implements IPacienteService {
         if (name != null) return pacienteRepository.findByNombre(name);
         else
             return null;
+    }
+
+    // Obtener todos los pacientes, paginados
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientes(Pageable pageable) {
+        return pacienteRepository.findAll(pageable);
     }
 
     // Actualizar un paciente

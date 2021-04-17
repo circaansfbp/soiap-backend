@@ -1,6 +1,9 @@
 package pt.fmbp.soiapbackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +49,14 @@ public class PacienteController {
         if (!pacientes.isEmpty()) return new ResponseEntity<>(pacientes, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Obtener todos los pacientes, paginados
+    @GetMapping("/get/page/{pageNumber}")
+    public ResponseEntity<Page<Paciente>> getPacientes (@PathVariable(value = "pageNumber") Integer nroPagina) {
+        Page pageOfPatients = pacienteService.getPacientes(PageRequest.of(nroPagina, 5));
+
+        return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
     }
 
     // Actualizar los datos de un paciente
