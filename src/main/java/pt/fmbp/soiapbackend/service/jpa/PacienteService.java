@@ -26,20 +26,20 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
+    // Obtener uno o más pacientes por un nombre
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientesByName(String name, Pageable pageable) {
+        if (name != null) return pacienteRepository.findAllByNombreContaining(name, pageable);
+        else
+            return null;
+    }
+
     // Obtener un paciente específico por su ID
     @Override
     @Transactional(readOnly = true)
     public Paciente getPacienteById(Long idPaciente) {
         return pacienteRepository.findById(idPaciente).orElse(null);
-    }
-
-    // Obtener uno o más pacientes por un nombre
-    @Override
-    @Transactional(readOnly = true)
-    public List<Paciente> getPacienteByName(String name) {
-        if (name != null) return pacienteRepository.findByNombre(name);
-        else
-            return null;
     }
 
     // Obtener todos los pacientes, paginados

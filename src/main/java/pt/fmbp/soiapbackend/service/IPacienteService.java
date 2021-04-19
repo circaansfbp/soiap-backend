@@ -13,7 +13,7 @@ public interface IPacienteService {
 
     Paciente savePaciente(Paciente paciente);
 
-    List<Paciente> getPacienteByName(String name);
+    Page<Paciente> getPacientesByName(String name, Pageable pageable);
 
     Page<Paciente> getPacientes(Pageable pageable);
 

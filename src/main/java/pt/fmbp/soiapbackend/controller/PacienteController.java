@@ -3,7 +3,6 @@ package pt.fmbp.soiapbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,11 +41,12 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes por un nombre
-    @GetMapping("/get/{nombre}")
-    public ResponseEntity<List<Paciente>> getPacientePorNombre (@PathVariable(value = "nombre") String nombre) {
-        List<Paciente> pacientes = pacienteService.getPacienteByName(nombre);
+    @GetMapping("/get/by-name/page/{pageNumber}")
+    public ResponseEntity<Page<Paciente>> getPacientePorNombre (@PathVariable(value = "pageNumber") Integer nroPagina,
+                                                                @RequestParam String nombre) {
+        Page pageOfPatientsNamed = pacienteService.getPacientesByName(nombre, PageRequest.of(nroPagina, 5));
 
-        if (!pacientes.isEmpty()) return new ResponseEntity<>(pacientes, HttpStatus.OK);
+        if (!pageOfPatientsNamed.isEmpty()) return new ResponseEntity<>(pageOfPatientsNamed, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
