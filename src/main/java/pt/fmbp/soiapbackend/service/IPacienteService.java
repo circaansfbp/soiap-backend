@@ -17,5 +17,9 @@ public interface IPacienteService {
 
     Page<Paciente> getPacientes(Pageable pageable);
 
+    Page<Paciente> getPacientesActivos(Pageable pageable);
+
+    Page<Paciente> getPacientesByNameActivos(String name, Pageable pageable);
+
     Paciente deletePaciente(Long idPaciente);
 }

@@ -12,4 +12,9 @@ import java.util.List;
 public interface IPacienteRepository extends JpaRepository<Paciente, Long> {
     // SELECT * FROM paciente WHERE nombre LIKE = %?%
     Page<Paciente> findAllByNombreContaining(String nombre, Pageable pageable);
+
+    Page<Paciente> findAllByEstadoAndNombreContaining(String estado, String nombre, Pageable pageable);
+
+    // SELECT * FROM paciente WHERE estado = ? (Retornar solo los pacientes activos)
+    Page<Paciente> findAllByEstado(String estado, Pageable pageable);
 }

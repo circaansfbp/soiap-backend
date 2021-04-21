@@ -88,6 +88,7 @@ public class Paciente implements Serializable {
     @PrePersist
     private void PrePersist () {
         this.estado = "Activo";
+        this.telefono = "+569" + this.telefono;
     }
 
     public Long getIdPaciente() {

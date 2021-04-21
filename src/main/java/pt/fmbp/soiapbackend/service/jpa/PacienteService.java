@@ -35,6 +35,15 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
+    // Obtener uno o más pacientes por nombre, que se encuentren con estado 'Activo'
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientesByNameActivos(String name, Pageable pageable) {
+        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining("Activo", name, pageable);
+        else
+            return null;
+    }
+
     // Obtener un paciente específico por su ID
     @Override
     @Transactional(readOnly = true)
@@ -47,6 +56,13 @@ public class PacienteService implements IPacienteService {
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientes(Pageable pageable) {
         return pacienteRepository.findAll(pageable);
+    }
+
+    // Obtener todos los pacientes activos (que no han sido eliminados), paginados
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientesActivos(Pageable pageable) {
+        return pacienteRepository.findAllByEstado("Activo", pageable);
     }
 
     // Actualizar un paciente
@@ -66,7 +82,7 @@ public class PacienteService implements IPacienteService {
 
             // Actualiza número de teléfono
             if (!pacienteToUpdate.getTelefono().equals(paciente.getTelefono()))
-                pacienteToUpdate.setTelefono(paciente.getTelefono());
+                pacienteToUpdate.setTelefono("+569" + paciente.getTelefono());
 
             // Actualiza fecha de nacimiento
             if (!pacienteToUpdate.getFechaNacimiento().equals(paciente.getFechaNacimiento()))
