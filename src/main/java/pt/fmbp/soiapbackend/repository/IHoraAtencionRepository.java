@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IHoraAtencionRepository extends JpaRepository<HoraAtencion, Long> {
     // SELECT * FROM hora_atencion WHERE fecha_atencion = ?
-    List<HoraAtencion> findByFechaAtencion(Date fechaAtencion);
+    List<HoraAtencion> findByFechaAtencionOrderByHoraAtencionAsc(Date fechaAtencion);
 }

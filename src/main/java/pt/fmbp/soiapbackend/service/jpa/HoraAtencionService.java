@@ -35,7 +35,7 @@ public class HoraAtencionService implements IHoraAtencionService {
     @Override
     @Transactional(readOnly = true)
     public List<HoraAtencion> getHorasPorFecha(Date fechaAtencion) {
-        return horaAtencionRepository.findByFechaAtencion(fechaAtencion);
+        return horaAtencionRepository.findByFechaAtencionOrderByHoraAtencionAsc(fechaAtencion);
     }
 
     // Actualizar una hora de atención
