@@ -40,13 +40,23 @@ public class PacienteController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Obtener uno o más pacientes por un nombre (DEVUELVE SOLO AQUELLOS CON ESTADO 'ACTIVO')
+    // Obtener uno o más pacientes activos, por nombre, paginados
     @GetMapping("/get/by-name/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientePorNombre (@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                 @RequestParam String nombre) {
         Page pageOfPatientsNamed = pacienteService.getPacientesByNameActivos(nombre, PageRequest.of(nroPagina, 5));
 
         if (!pageOfPatientsNamed.isEmpty()) return new ResponseEntity<>(pageOfPatientsNamed, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Obtener uno o más pacientes activos, por nombre, sin paginar
+    @GetMapping("/get/by-name")
+    public ResponseEntity<List<Paciente>> getPacientesPorNombreSinPaginar (@RequestParam String nombre) {
+        List patientsNamed = pacienteService.getPacientesActivosPorNombreSinPaginar(nombre);
+
+        if (!patientsNamed.isEmpty()) return new ResponseEntity<>(patientsNamed, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

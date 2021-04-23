@@ -1,5 +1,4 @@
 package pt.fmbp.soiapbackend.entity;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 
@@ -37,7 +36,8 @@ public class HoraAtencion implements Serializable {
     @Column(nullable = false)
     private boolean disponible;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JsonIgnoreProperties({"atenciones", "hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_paciente")
     private Paciente paciente;
 

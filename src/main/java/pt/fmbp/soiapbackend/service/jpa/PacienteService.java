@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.fmbp.soiapbackend.entity.HoraAtencion;
 import pt.fmbp.soiapbackend.entity.Paciente;
 import pt.fmbp.soiapbackend.repository.IPacienteRepository;
 import pt.fmbp.soiapbackend.service.IPacienteService;
@@ -26,7 +27,7 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
-    // Obtener uno o más pacientes por un nombre
+    // Obtener uno o más pacientes por un nombre, paginados
     @Override
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientesByName(String name, Pageable pageable) {
@@ -35,11 +36,20 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
-    // Obtener uno o más pacientes por nombre, que se encuentren con estado 'Activo'
+    // Obtener uno o más pacientes por nombre, que se encuentren con estado 'Activo', paginados
     @Override
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientesByNameActivos(String name, Pageable pageable) {
         if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining("Activo", name, pageable);
+        else
+            return null;
+    }
+
+    // Obtener uno o más pacientes activos por nombre, sin paginar
+    @Override
+    @Transactional(readOnly = true)
+    public List<Paciente> getPacientesActivosPorNombreSinPaginar(String name) {
+        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining("Activo", name);
         else
             return null;
     }
@@ -63,6 +73,12 @@ public class PacienteService implements IPacienteService {
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientesActivos(Pageable pageable) {
         return pacienteRepository.findAllByEstado("Activo", pageable);
+    }
+
+    // Obtener los horarios de atención de un paciente
+    @Override
+    public Page<HoraAtencion> getHorariosAsociadosPaciente(Long idPaciente, Pageable pageable) {
+        return null;
     }
 
     // Actualizar un paciente
