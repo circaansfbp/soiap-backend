@@ -9,6 +9,9 @@ import pt.fmbp.soiapbackend.entity.HoraAtencion;
 import pt.fmbp.soiapbackend.repository.IHoraAtencionRepository;
 import pt.fmbp.soiapbackend.service.IHoraAtencionService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +25,10 @@ public class HoraAtencionService implements IHoraAtencionService {
     @Override
     @Transactional
     public HoraAtencion saveHoraAtencion(HoraAtencion horaAtencion) {
-        // horaAtencion.setDisponible(false);
-        return horaAtencionRepository.save(horaAtencion);
+        if (horaAtencion != null) {
+            return horaAtencionRepository.save(horaAtencion);
+        } else
+            return null;
     }
 
     // Obtener un horario de atención específico
@@ -48,11 +53,11 @@ public class HoraAtencionService implements IHoraAtencionService {
 
         try {
             // Actualiza asistencia
-            if (hourToUpdate.isAsistencia() != horaAtencion.isAsistencia()) hourToUpdate.setAsistencia(horaAtencion.isAsistencia());
+            if (hourToUpdate.getAsistencia() != horaAtencion.getAsistencia()) hourToUpdate.setAsistencia(horaAtencion.getAsistencia());
 
             // Actualiza confirmación de la asistencia
-            if (hourToUpdate.isConfirmaAsistencia() != horaAtencion.isConfirmaAsistencia()) hourToUpdate.setConfirmaAsistencia(
-                    horaAtencion.isConfirmaAsistencia()
+            if (hourToUpdate.getConfirmaAsistencia() != horaAtencion.getConfirmaAsistencia()) hourToUpdate.setConfirmaAsistencia(
+                    horaAtencion.getConfirmaAsistencia()
             );
 
             // Actualiza hora de la atención

@@ -42,7 +42,7 @@ public class PacienteController {
 
     // Obtener uno o más pacientes activos, por nombre, paginados
     @GetMapping("/get/by-name/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> getPacientePorNombre (@PathVariable(value = "pageNumber") Integer nroPagina,
+    public ResponseEntity<Page<Paciente>> getPacientesPorNombre (@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                 @RequestParam String nombre) {
         Page pageOfPatientsNamed = pacienteService.getPacientesByNameActivos(nombre, PageRequest.of(nroPagina, 5));
 
@@ -59,6 +59,64 @@ public class PacienteController {
         if (!patientsNamed.isEmpty()) return new ResponseEntity<>(patientsNamed, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Obtener uno o más pacientes activos, por apellido, paginados
+    @GetMapping("/get/by-lastname/page/{pageNumber}")
+    public ResponseEntity<Page<Paciente>> getPacientesPorApellido (@PathVariable(value = "pageNumber") Integer nroPagina,
+                                                                               @RequestParam String apellido) {
+        if (nroPagina != null && apellido != null) {
+            Page pageOfPatientsWhoseLastnameIs = pacienteService.getPacientesActivosPorApellido(apellido, PageRequest.of(nroPagina, 5));
+
+            if (!pageOfPatientsWhoseLastnameIs.isEmpty()) return new ResponseEntity<>(pageOfPatientsWhoseLastnameIs, HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    // Obtener uno o más pacientes activos, por apellido, sin paginar
+    @GetMapping("/get/by-lastname")
+    public ResponseEntity<List<Paciente>> getPacientesPorApellidoSinPaginar (@RequestParam String apellido) {
+        if (apellido != null) {
+            List patientsWhoseLastnameIs = pacienteService.getPacientesActivosPorApellidoSinPaginar(apellido);
+
+            if (!patientsWhoseLastnameIs.isEmpty()) return new ResponseEntity<>(patientsWhoseLastnameIs, HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    // Obtener uno o más pacientes activos, por nombre y apellido, paginados
+    @GetMapping("/get/by-name-lastname/page/{pageNumber}")
+    public ResponseEntity<Page<Paciente>> getPacientesPorNombreApellido(@PathVariable(value = "pageNumber") Integer nroPagina, @RequestParam String nombre,
+                                                                        @RequestParam String apellido) {
+        if (nroPagina != null && nombre != null && apellido != null) {
+            Page patientsByNameAndLastname = pacienteService.getPacientesActivosPorNombreApellido(nombre, apellido, PageRequest.of(nroPagina, 5));
+
+            if (!patientsByNameAndLastname.isEmpty()) return new ResponseEntity<>(patientsByNameAndLastname, HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    // Obtener uno o más pacientes activos, por nombre y apellido, sin paginar
+    @GetMapping("/get/by-name-lastname")
+    public ResponseEntity<List<Paciente>> getPacientesPorNombreApellidoSinPaginar(@RequestParam String nombre, @RequestParam String apellido) {
+        if (nombre != null && apellido != null) {
+            List<Paciente> patientsByNameAndLastname = pacienteService.getPacientesActivosPorNombreApellidoSinPaginar(nombre, apellido);
+
+            if (!patientsByNameAndLastname.isEmpty()) return new ResponseEntity<>(patientsByNameAndLastname, HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     // Obtener todos los pacientes, paginados (DEVUELVE SOLO AQUELLOS CON ESTADO 'ACTIVO')

@@ -49,7 +49,7 @@ public class Paciente implements Serializable {
     @Column(nullable = false)
     private String estado;
 
-    @JsonIgnoreProperties({"paciente", "hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties(value = {"paciente", "hibernateLazyInitializer", "handler"}, allowSetters = true)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "paciente", cascade = CascadeType.ALL)
     private List<HoraAtencion> atenciones;
 

@@ -36,6 +36,15 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
+    // Obtener uno o más pacientes activos por nombre, sin paginar
+    @Override
+    @Transactional(readOnly = true)
+    public List<Paciente> getPacientesActivosPorNombreSinPaginar(String name) {
+        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining("Activo", name);
+        else
+            return null;
+    }
+
     // Obtener uno o más pacientes por nombre, que se encuentren con estado 'Activo', paginados
     @Override
     @Transactional(readOnly = true)
@@ -45,11 +54,40 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
-    // Obtener uno o más pacientes activos por nombre, sin paginar
+    // Obtener uno o más pacientes activos por su apellido, sin paginar
     @Override
     @Transactional(readOnly = true)
-    public List<Paciente> getPacientesActivosPorNombreSinPaginar(String name) {
-        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining("Activo", name);
+    public List<Paciente> getPacientesActivosPorApellidoSinPaginar(String apellido) {
+        if (apellido != null) return pacienteRepository.findAllByEstadoAndApellidoContaining("Activo", apellido);
+        else
+            return null;
+    }
+
+    // Obtener uno o más pacientes activos por su apellido, paginados
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientesActivosPorApellido(String apellido, Pageable pageable) {
+        if (apellido != null) return pacienteRepository.findAllByEstadoAndApellidoContaining("Activo", apellido, pageable);
+        else
+            return null;
+    }
+
+    // Obtener uno o más pacientes activos por su nombre y apellido, sin paginar
+    @Override
+    @Transactional(readOnly = true)
+    public List<Paciente> getPacientesActivosPorNombreApellidoSinPaginar(String nombre, String apellido) {
+        if (nombre != null && apellido != null) return pacienteRepository.
+                findAllByEstadoAndNombreContainingAndApellidoContaining("Activo", nombre, apellido);
+        else
+            return null;
+    }
+
+    // Obtener uno o más pacientes activos por su nombre y apellido, paginados
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientesActivosPorNombreApellido(String nombre, String apellido, Pageable pageable) {
+        if (nombre != null && apellido != null) return pacienteRepository.
+                findAllByEstadoAndNombreContainingAndApellidoContaining("Activo", nombre, apellido, pageable);
         else
             return null;
     }
@@ -73,12 +111,6 @@ public class PacienteService implements IPacienteService {
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientesActivos(Pageable pageable) {
         return pacienteRepository.findAllByEstado("Activo", pageable);
-    }
-
-    // Obtener los horarios de atención de un paciente
-    @Override
-    public Page<HoraAtencion> getHorariosAsociadosPaciente(Long idPaciente, Pageable pageable) {
-        return null;
     }
 
     // Actualizar un paciente

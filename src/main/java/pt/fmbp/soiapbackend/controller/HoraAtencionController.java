@@ -21,10 +21,14 @@ public class HoraAtencionController {
 
     // Crear un nuevo horario de atención
     @PostMapping("")
-    public ResponseEntity<HoraAtencion> createHoraAtencion (@RequestBody HoraAtencion horaAtencion) {
+    public ResponseEntity<HoraAtencion> createHoraAtencion (@RequestBody HoraAtencion horaAtencion) throws ParseException {
         if (horaAtencion != null) {
             HoraAtencion horaAtencionCreada = horaAtencionService.saveHoraAtencion(horaAtencion);
-            return new ResponseEntity<>(horaAtencionCreada, HttpStatus.CREATED);
+
+            // Si la hora y fecha de la atención provista coincide con una ya existente
+            if (horaAtencionCreada == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            else
+                return new ResponseEntity<>(horaAtencionCreada, HttpStatus.CREATED);
         } else
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

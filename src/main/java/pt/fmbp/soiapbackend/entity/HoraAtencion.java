@@ -17,10 +17,16 @@ public class HoraAtencion implements Serializable {
     @Column(name = "id_atencion", nullable = false, updatable = false)
     private Long idAtencion;
 
-    private boolean asistencia;
+    //0 = PENDIENTE
+    //1 = ASISTE
+    //-1 = NO ASISTE
+    private int asistencia;
 
+    //0 = PENDIENTE
+    //1 = ASISTE
+    //-1 = NO ASISTE
     @Column(name = "confirma_asistencia")
-    private boolean confirmaAsistencia;
+    private int confirmaAsistencia;
 
     @Column(name = "hora_atencion")
     @NotNull
@@ -33,9 +39,6 @@ public class HoraAtencion implements Serializable {
     @Column(name = "nro_consulta")
     private int nroConsulta;
 
-    @Column(nullable = false)
-    private boolean disponible;
-
     @JsonIgnoreProperties({"atenciones", "hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_paciente")
@@ -47,42 +50,40 @@ public class HoraAtencion implements Serializable {
 
     public HoraAtencion() { }
 
-    public HoraAtencion(Long idAtencion, boolean asistencia, boolean confirmaAsistencia, LocalTime horaAtencion, Date fechaAtencion,
-                        int nroConsulta, boolean disponible, Paciente paciente, Pago pago) {
+    public HoraAtencion(Long idAtencion, int asistencia, int confirmaAsistencia, LocalTime horaAtencion, Date fechaAtencion, int nroConsulta, Paciente paciente, Pago pago) {
         this.idAtencion = idAtencion;
         this.asistencia = asistencia;
         this.confirmaAsistencia = confirmaAsistencia;
         this.horaAtencion = horaAtencion;
         this.fechaAtencion = fechaAtencion;
         this.nroConsulta = nroConsulta;
-        this.disponible = disponible;
         this.paciente = paciente;
         this.pago = pago;
     }
 
-    // ARREGLAR PERSISTENCIA DEL ESTADO Y LA DISPONIBILIDAD AL BORRAR UN REGISTRO
     @PrePersist
-    private void prePersist () {
-        this.disponible = false;
+    private void prePersist() {
+        this.asistencia = 0;
+        this.confirmaAsistencia = 0;
     }
 
     public Long getIdAtencion() {
         return idAtencion;
     }
 
-    public boolean isAsistencia() {
+    public int getAsistencia() {
         return asistencia;
     }
 
-    public void setAsistencia(boolean asistencia) {
+    public void setAsistencia(int asistencia) {
         this.asistencia = asistencia;
     }
 
-    public boolean isConfirmaAsistencia() {
+    public int getConfirmaAsistencia() {
         return confirmaAsistencia;
     }
 
-    public void setConfirmaAsistencia(boolean confirmaAsistencia) {
+    public void setConfirmaAsistencia(int confirmaAsistencia) {
         this.confirmaAsistencia = confirmaAsistencia;
     }
 
@@ -110,14 +111,6 @@ public class HoraAtencion implements Serializable {
         this.nroConsulta = nroConsulta;
     }
 
-    public boolean isDisponible() {
-        return disponible;
-    }
-
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
-
     public Paciente getPaciente() {
         return paciente;
     }
@@ -139,12 +132,12 @@ public class HoraAtencion implements Serializable {
         if (this == o) return true;
         if (!(o instanceof HoraAtencion)) return false;
         HoraAtencion that = (HoraAtencion) o;
-        return asistencia == that.asistencia && confirmaAsistencia == that.confirmaAsistencia && nroConsulta == that.nroConsulta && disponible == that.disponible && Objects.equals(idAtencion, that.idAtencion) && Objects.equals(horaAtencion, that.horaAtencion) && Objects.equals(fechaAtencion, that.fechaAtencion) && Objects.equals(paciente, that.paciente) && Objects.equals(pago, that.pago);
+        return asistencia == that.asistencia && confirmaAsistencia == that.confirmaAsistencia && nroConsulta == that.nroConsulta && Objects.equals(idAtencion, that.idAtencion) && Objects.equals(horaAtencion, that.horaAtencion) && Objects.equals(fechaAtencion, that.fechaAtencion) && Objects.equals(paciente, that.paciente) && Objects.equals(pago, that.pago);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idAtencion, asistencia, confirmaAsistencia, horaAtencion, fechaAtencion, nroConsulta, disponible, paciente, pago);
+        return Objects.hash(idAtencion, asistencia, confirmaAsistencia, horaAtencion, fechaAtencion, nroConsulta, paciente, pago);
     }
 
     @Override
@@ -156,7 +149,6 @@ public class HoraAtencion implements Serializable {
                 ", horaAtencion=" + horaAtencion +
                 ", fechaAtencion=" + fechaAtencion +
                 ", nroConsulta=" + nroConsulta +
-                ", disponible=" + disponible +
                 ", paciente=" + paciente +
                 ", pago=" + pago +
                 '}';

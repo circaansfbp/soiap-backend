@@ -4,13 +4,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 public interface IHoraAtencionService {
 
     // Guardar un horario de atención
-    HoraAtencion saveHoraAtencion(HoraAtencion horaAtencion);
+    HoraAtencion saveHoraAtencion(HoraAtencion horaAtencion) throws ParseException;
 
     // Obtener un horario de atención por su ID
     HoraAtencion getHoraAtencion(Long idAtencion);
