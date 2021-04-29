@@ -7,6 +7,7 @@ import org.hibernate.annotations.NotFoundAction;
 import javax.annotation.processing.Generated;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,8 +31,7 @@ public class Paciente implements Serializable {
     private String telefono;
 
     @Column(name = "fecha_nacimiento")
-    @Temporal(value = TemporalType.DATE)
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     private String ocupacion;
 
@@ -65,7 +65,7 @@ public class Paciente implements Serializable {
 
     public Paciente () { this.atenciones = new ArrayList<>(); }
 
-    public Paciente(Long idPaciente, String nombre, String apellido, String telefono, Date fechaNacimiento,
+    public Paciente(Long idPaciente, String nombre, String apellido, String telefono, LocalDate fechaNacimiento,
                     String ocupacion, String institucion, String afiliacionSalud, String estadoCivil, String familiaNuclear,
                     String estado, List<HoraAtencion> atenciones, FichaTratamiento fichaTratamiento, Anamnesis anamnesis) {
         this.idPaciente = idPaciente;
@@ -118,11 +118,11 @@ public class Paciente implements Serializable {
         this.telefono = telefono;
     }
 
-    public Date getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

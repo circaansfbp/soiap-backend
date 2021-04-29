@@ -133,7 +133,7 @@ public class PacienteService implements IPacienteService {
                 pacienteToUpdate.setTelefono("+569" + paciente.getTelefono());
 
             // Actualiza fecha de nacimiento
-            if (!pacienteToUpdate.getFechaNacimiento().equals(paciente.getFechaNacimiento()))
+            if (pacienteToUpdate.getFechaNacimiento() != paciente.getFechaNacimiento())
                 pacienteToUpdate.setFechaNacimiento(paciente.getFechaNacimiento());
 
             // Actualiza ocupación
