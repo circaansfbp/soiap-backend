@@ -30,3 +30,12 @@ INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_
 INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (1, -1, NOW(), '18:15', 2, 1, NULL);
 INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (1, -1, NOW(), '15:10', 3, 18, NULL);
 INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (1, 1, NOW(), '20:00', 6, 15, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (0, 0, '2021-04-30', '16:00', 4, 20, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (1, -1, '2021-05-01', '10:30', 2, 11, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (-1, -1, '2021-04-30', '11:20', 2, 16, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (1, 1, '2021-05-01', '15:30', 5, 14, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (1, 0, '2021-04-30', '12:00', 1, 15, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (0, 0, '2021-04-30', '16:00', 4, 1, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (-1, 1, '2021-04-30', '13:00', 3, 1, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (0, 0, '2021-05-01', '17:30', 2, 16, NULL);
+INSERT INTO hora_atencion(asistencia, confirma_asistencia, fecha_atencion, hora_atencion, nro_consulta, id_paciente, id_pago) VALUES (1, 1, '2021-05-01', '18:40', 1, 4, NULL);

@@ -4,6 +4,7 @@ import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.Objects;
@@ -33,8 +34,8 @@ public class HoraAtencion implements Serializable {
     private LocalTime horaAtencion;
 
     @Column(name = "fecha_atencion", nullable = false)
-    @Temporal(value = TemporalType.DATE)
-    private Date fechaAtencion;
+    //@Temporal(value = TemporalType.DATE)
+    private LocalDate fechaAtencion;
 
     @Column(name = "nro_consulta")
     private int nroConsulta;
@@ -50,7 +51,7 @@ public class HoraAtencion implements Serializable {
 
     public HoraAtencion() { }
 
-    public HoraAtencion(Long idAtencion, int asistencia, int confirmaAsistencia, LocalTime horaAtencion, Date fechaAtencion, int nroConsulta, Paciente paciente, Pago pago) {
+    public HoraAtencion(Long idAtencion, int asistencia, int confirmaAsistencia, LocalTime horaAtencion, LocalDate fechaAtencion, int nroConsulta, Paciente paciente, Pago pago) {
         this.idAtencion = idAtencion;
         this.asistencia = asistencia;
         this.confirmaAsistencia = confirmaAsistencia;
@@ -95,11 +96,11 @@ public class HoraAtencion implements Serializable {
         this.horaAtencion = horaAtencion;
     }
 
-    public Date getFechaAtencion() {
+    public LocalDate getFechaAtencion() {
         return fechaAtencion;
     }
 
-    public void setFechaAtencion(Date fechaAtencion) {
+    public void setFechaAtencion(LocalDate fechaAtencion) {
         this.fechaAtencion = fechaAtencion;
     }
 

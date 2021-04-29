@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface IHoraAtencionService {
     HoraAtencion getHoraAtencion(Long idAtencion);
 
     // Obtener todos los horarios para una fecha determinada
-    List<HoraAtencion> getHorasPorFecha(Date fechaAtencion);
+    List<HoraAtencion> getHorasPorFecha(LocalDate fechaAtencion);
 
     // Actualizar una hora de atención
     HoraAtencion updateHoraAtencion (HoraAtencion horaAtencion, Long idAtencion);

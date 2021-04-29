@@ -12,6 +12,7 @@ import pt.fmbp.soiapbackend.service.IHoraAtencionService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,15 @@ public class HoraAtencionService implements IHoraAtencionService {
     @Transactional
     public HoraAtencion saveHoraAtencion(HoraAtencion horaAtencion) {
         if (horaAtencion != null) {
+
+            List<HoraAtencion> horasExistentes = getHorasPorFecha(horaAtencion.getFechaAtencion());
+
+            for (HoraAtencion hora : horasExistentes) {
+                if (hora.getHoraAtencion() == horaAtencion.getHoraAtencion()) {
+                    return null;
+                }
+            }
+
             return horaAtencionRepository.save(horaAtencion);
         } else
             return null;
@@ -41,7 +51,7 @@ public class HoraAtencionService implements IHoraAtencionService {
     // Obtener horarios de atencion por una fecha determinada
     @Override
     @Transactional(readOnly = true)
-    public List<HoraAtencion> getHorasPorFecha(Date fechaAtencion) {
+    public List<HoraAtencion> getHorasPorFecha(LocalDate fechaAtencion) {
         return horaAtencionRepository.findByFechaAtencionOrderByHoraAtencionAsc(fechaAtencion);
     }
 

@@ -9,6 +9,7 @@ import pt.fmbp.soiapbackend.service.IHoraAtencionService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -45,12 +46,10 @@ public class HoraAtencionController {
     }
 
     // Obtener horarios de atención por fecha
-    // MANEJAR EXCEPCIÓN
     @GetMapping("/get/{fecha}")
-    public ResponseEntity<List<HoraAtencion>> getHoraAtencionPorFecha(@PathVariable(value = "fecha") String fechaAtencion)
-            throws ParseException {
-        Date date = new SimpleDateFormat("yyyy-MM-dd").parse(fechaAtencion);
-        List<HoraAtencion> horarios = horaAtencionService.getHorasPorFecha(date);
+    public ResponseEntity<List<HoraAtencion>> getHoraAtencionPorFecha(@PathVariable(value = "fecha") String fechaAtencion) {
+        LocalDate localDate = LocalDate.parse(fechaAtencion);
+        List<HoraAtencion> horarios = horaAtencionService.getHorasPorFecha(localDate);
 
         return new ResponseEntity<>(horarios, HttpStatus.OK);
     }
