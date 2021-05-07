@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pt.fmbp.soiapbackend.entity.HoraAtencion;
 import pt.fmbp.soiapbackend.entity.Paciente;
 
 import java.util.List;

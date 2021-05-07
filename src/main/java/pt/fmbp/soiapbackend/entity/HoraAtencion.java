@@ -34,7 +34,6 @@ public class HoraAtencion implements Serializable {
     private LocalTime horaAtencion;
 
     @Column(name = "fecha_atencion", nullable = false)
-    //@Temporal(value = TemporalType.DATE)
     private LocalDate fechaAtencion;
 
     @Column(name = "nro_consulta")
