@@ -6,4 +6,13 @@ public interface IPagoService {
 
     // Registrar el pago de una o más atenciones
     Pago registerPayment(Pago pago);
+
+    // Obtener un pago específico
+    Pago getPaymentById(Long idPago);
+
+    // Actualizar un pago
+    Pago updatePayment(Long idPago, Pago pago);
+
+    // Eliminación lógica de un pago
+    void deletePayment(Long idPago);
 }

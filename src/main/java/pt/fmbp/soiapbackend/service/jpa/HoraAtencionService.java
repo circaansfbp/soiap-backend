@@ -85,7 +85,8 @@ public class HoraAtencionService implements IHoraAtencionService {
                     horaAtencion.getNroConsulta()
             );
 
-            // FALTA ACTUALIZACIÓN DE UN PAGO POR LA ATENCIÓN Y MANEJAR LA DISPONIBILIDAD DE UNA HORA DE ATENCIÓN
+            // Actualizar el pago de una hora de atención
+            if (hourToUpdate.getPago() != horaAtencion.getPago()) hourToUpdate.setPago(horaAtencion.getPago());
 
             horaAtencionRepository.save(hourToUpdate);
             return hourToUpdate;

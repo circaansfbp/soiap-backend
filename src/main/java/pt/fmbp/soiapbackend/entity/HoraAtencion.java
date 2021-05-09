@@ -44,6 +44,7 @@ public class HoraAtencion implements Serializable {
     @JoinColumn(name = "id_paciente")
     private Paciente paciente;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_pago")
     private Pago pago;
