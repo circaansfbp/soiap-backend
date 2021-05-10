@@ -2,7 +2,7 @@ package pt.fmbp.soiapbackend.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -14,10 +14,10 @@ public class Anamnesis implements Serializable {
     @Column(name = "id_anamnesis", nullable = false, updatable = false)
     private Long idAnamnesis;
 
-    @Temporal(value = TemporalType.DATE)
-    private Date fecha;
+    @Column(name = "fecha_anamnesis")
+    private LocalDate fechaAnamnesis;
 
-    @Column(name = "motivo_consulta_paciente",nullable = false)
+    @Column(name = "motivo_consulta_paciente")
     private String motivoConsultaPaciente;
 
     @Column(name = "antecedentes_paciente")
@@ -31,12 +31,15 @@ public class Anamnesis implements Serializable {
     @Column(nullable = false)
     private String estado;
 
+    @OneToOne(mappedBy = "anamnesis")
+    private Paciente paciente;
+
     public Anamnesis() { }
 
-    public Anamnesis(Long idAnamnesis, Date fecha, String motivoConsultaPaciente, String antecedentesPaciente,
+    public Anamnesis(Long idAnamnesis, LocalDate fechaAnamnesis, String motivoConsultaPaciente, String antecedentesPaciente,
                      String antecedentesFamiliares, String observaciones) {
         this.idAnamnesis = idAnamnesis;
-        this.fecha = fecha;
+        this.fechaAnamnesis = fechaAnamnesis;
         this.motivoConsultaPaciente = motivoConsultaPaciente;
         this.antecedentesPaciente = antecedentesPaciente;
         this.antecedentesFamiliares = antecedentesFamiliares;
@@ -44,16 +47,22 @@ public class Anamnesis implements Serializable {
         this.estado = "Activo";
     }
 
+    @PrePersist
+    private void prePersist() {
+        this.estado = "Activo";
+        this.fechaAnamnesis = LocalDate.now();
+    }
+
     public Long getIdAnamnesis() {
         return idAnamnesis;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public LocalDate getFechaAnamnesis() {
+        return fechaAnamnesis;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaAnamnesis(LocalDate fechaAnamnesis) {
+        this.fechaAnamnesis = fechaAnamnesis;
     }
 
     public String getMotivoConsultaPaciente() {
@@ -96,29 +105,38 @@ public class Anamnesis implements Serializable {
         this.estado = estado;
     }
 
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Anamnesis)) return false;
         Anamnesis anamnesis = (Anamnesis) o;
-        return Objects.equals(idAnamnesis, anamnesis.idAnamnesis) && Objects.equals(fecha, anamnesis.fecha) && Objects.equals(motivoConsultaPaciente, anamnesis.motivoConsultaPaciente) && Objects.equals(antecedentesPaciente, anamnesis.antecedentesPaciente) && Objects.equals(antecedentesFamiliares, anamnesis.antecedentesFamiliares) && Objects.equals(observaciones, anamnesis.observaciones) && Objects.equals(estado, anamnesis.estado);
+        return Objects.equals(idAnamnesis, anamnesis.idAnamnesis) && Objects.equals(fechaAnamnesis, anamnesis.fechaAnamnesis) && Objects.equals(motivoConsultaPaciente, anamnesis.motivoConsultaPaciente) && Objects.equals(antecedentesPaciente, anamnesis.antecedentesPaciente) && Objects.equals(antecedentesFamiliares, anamnesis.antecedentesFamiliares) && Objects.equals(observaciones, anamnesis.observaciones) && Objects.equals(estado, anamnesis.estado) && Objects.equals(paciente, anamnesis.paciente);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idAnamnesis, fecha, motivoConsultaPaciente, antecedentesPaciente, antecedentesFamiliares, observaciones, estado);
+        return Objects.hash(idAnamnesis, fechaAnamnesis, motivoConsultaPaciente, antecedentesPaciente, antecedentesFamiliares, observaciones, estado, paciente);
     }
 
     @Override
     public String toString() {
         return "Anamnesis{" +
                 "idAnamnesis=" + idAnamnesis +
-                ", fecha=" + fecha +
+                ", fechaAnamnesis=" + fechaAnamnesis +
                 ", motivoConsultaPaciente='" + motivoConsultaPaciente + '\'' +
                 ", antecedentesPaciente='" + antecedentesPaciente + '\'' +
                 ", antecedentesFamiliares='" + antecedentesFamiliares + '\'' +
                 ", observaciones='" + observaciones + '\'' +
                 ", estado='" + estado + '\'' +
+                ", paciente=" + paciente +
                 '}';
     }
 }

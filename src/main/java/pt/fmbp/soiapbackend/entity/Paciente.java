@@ -49,19 +49,22 @@ public class Paciente implements Serializable {
     @Column(nullable = false)
     private String estado;
 
+    // Atenciones del paciente
     @JsonIgnoreProperties(value = {"paciente", "hibernateLazyInitializer", "handler"}, allowSetters = true)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "paciente", cascade = CascadeType.ALL)
     private List<HoraAtencion> atenciones;
+
+    // Anamnesis del paciente
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_anamnesis")
+    private Anamnesis anamnesis;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ficha")
     @NotFound(action = NotFoundAction.IGNORE)
     private FichaTratamiento fichaTratamiento;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_anamnesis")
-    @NotFound(action = NotFoundAction.IGNORE)
-    private Anamnesis anamnesis;
 
     public Paciente () { this.atenciones = new ArrayList<>(); }
 
