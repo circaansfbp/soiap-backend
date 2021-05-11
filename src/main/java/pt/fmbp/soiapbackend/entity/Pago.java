@@ -1,6 +1,7 @@
 package pt.fmbp.soiapbackend.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -18,9 +19,11 @@ public class Pago implements Serializable {
     private LocalDate fechaPago;
 
     @Column(name = "afiliacion_paciente")
+    @Size(max = 30)
     private String afiliacionPaciente;
 
     @Column(name = "medio_pago")
+    @Size(max = 30)
     private String medioPago;
 
     @Column(name = "monto_pago")
@@ -30,6 +33,7 @@ public class Pago implements Serializable {
     private int cantidadHorasPagadas;
 
     @Column(nullable = false)
+    @Size(max = 15)
     private String estado;
 
     public Pago() { }

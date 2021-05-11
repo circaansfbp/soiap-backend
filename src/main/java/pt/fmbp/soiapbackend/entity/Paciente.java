@@ -6,6 +6,7 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.annotation.processing.Generated;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,29 +25,40 @@ public class Paciente implements Serializable {
     @Column(name = "id_paciente", nullable = false, updatable = false)
     private Long idPaciente;
 
+    @Size(min = 3, max = 30)
     private String nombre;
 
+    @Size(min = 3, max = 30)
     private String apellido;
 
+    @Size(min = 12, max = 12)
     private String telefono;
 
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
+    @Size(max = 30)
     private String ocupacion;
 
+    @Size(max = 30)
     private String institucion;
 
     @Column(name = "afiliacion_salud")
+    @Size(max = 30)
     private String afiliacionSalud;
 
+
     @Column(name = "estado_civil")
+    @Size(max = 30)
     private String estadoCivil;
 
+
     @Column(name = "familia_nuclear")
+    @Size(max = 255)
     private String familiaNuclear;
 
     @Column(nullable = false)
+    @Size(max = 15)
     private String estado;
 
     // Atenciones del paciente
@@ -55,7 +67,7 @@ public class Paciente implements Serializable {
     private List<HoraAtencion> atenciones;
 
     // Anamnesis del paciente
-    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
+    @JsonIgnoreProperties(value = {"paciente", "hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_anamnesis")
     private Anamnesis anamnesis;

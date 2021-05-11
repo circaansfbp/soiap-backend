@@ -1,6 +1,9 @@
 package pt.fmbp.soiapbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -18,19 +21,25 @@ public class Anamnesis implements Serializable {
     private LocalDate fechaAnamnesis;
 
     @Column(name = "motivo_consulta_paciente")
+    @Size(max = 2000)
     private String motivoConsultaPaciente;
 
     @Column(name = "antecedentes_paciente")
+    @Size(max = 2000)
     private String antecedentesPaciente;
 
     @Column(name = "antecedentes_familiares")
+    @Size(max = 2000)
     private String antecedentesFamiliares;
 
+    @Size(max = 2000)
     private String observaciones;
 
     @Column(nullable = false)
+    @Size(max = 15)
     private String estado;
 
+    @JsonIgnoreProperties(value = {"anamnesis", "hibernateLazyInitializer", "handler"})
     @OneToOne(mappedBy = "anamnesis")
     private Paciente paciente;
 

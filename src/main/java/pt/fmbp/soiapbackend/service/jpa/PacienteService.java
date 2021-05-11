@@ -156,7 +156,10 @@ public class PacienteService implements IPacienteService {
             if (!pacienteToUpdate.getFamiliaNuclear().equalsIgnoreCase(paciente.getFamiliaNuclear()))
                 pacienteToUpdate.setFamiliaNuclear(paciente.getFamiliaNuclear());
 
-            // AGREGAR ACTUALIZACIÓN DE HORAS DE ATENCIÓN
+            // Actualiza la anamnesis del paciente
+            if (pacienteToUpdate.getAnamnesis() != paciente.getAnamnesis()) pacienteToUpdate.setAnamnesis(
+                    paciente.getAnamnesis()
+            );
 
             pacienteRepository.save(pacienteToUpdate);
             return pacienteToUpdate;
