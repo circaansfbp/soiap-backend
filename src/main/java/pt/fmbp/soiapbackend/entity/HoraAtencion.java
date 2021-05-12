@@ -1,12 +1,14 @@
 package pt.fmbp.soiapbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.istack.NotNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -21,21 +23,26 @@ public class HoraAtencion implements Serializable {
     //0 = PENDIENTE
     //1 = ASISTE
     //-1 = NO ASISTE
+    @NotNull
     private int asistencia;
 
     //0 = PENDIENTE
     //1 = ASISTE
     //-1 = NO ASISTE
+    @NotNull
     @Column(name = "confirma_asistencia")
     private int confirmaAsistencia;
 
-    @Column(name = "hora_atencion")
     @NotNull
+    @Column(name = "hora_atencion")
     private LocalTime horaAtencion;
 
+    @NotNull
     @Column(name = "fecha_atencion", nullable = false)
     private LocalDate fechaAtencion;
 
+    @Min(1)
+    @Max(8)
     @Column(name = "nro_consulta")
     private int nroConsulta;
 

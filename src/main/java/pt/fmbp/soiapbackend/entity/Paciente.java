@@ -6,6 +6,7 @@ import org.hibernate.annotations.NotFoundAction;
 
 import javax.annotation.processing.Generated;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -25,12 +26,15 @@ public class Paciente implements Serializable {
     @Column(name = "id_paciente", nullable = false, updatable = false)
     private Long idPaciente;
 
+    @NotEmpty
     @Size(min = 3, max = 30)
     private String nombre;
 
+    @NotEmpty
     @Size(min = 3, max = 30)
     private String apellido;
 
+    @NotEmpty
     @Size(min = 12, max = 12)
     private String telefono;
 
@@ -43,6 +47,7 @@ public class Paciente implements Serializable {
     @Size(max = 30)
     private String institucion;
 
+    @NotEmpty
     @Column(name = "afiliacion_salud")
     @Size(max = 30)
     private String afiliacionSalud;
@@ -57,7 +62,7 @@ public class Paciente implements Serializable {
     @Size(max = 255)
     private String familiaNuclear;
 
-    @Column(nullable = false)
+    @NotEmpty
     @Size(max = 15)
     private String estado;
 

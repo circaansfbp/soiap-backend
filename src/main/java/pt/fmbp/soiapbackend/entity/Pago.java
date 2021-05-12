@@ -1,6 +1,8 @@
 package pt.fmbp.soiapbackend.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -15,15 +17,18 @@ public class Pago implements Serializable {
     @Column(name = "id_pago", nullable = false, updatable = false)
     private Long idPago;
 
+    @NotNull
     @Column(name = "fecha_pago")
     private LocalDate fechaPago;
 
-    @Column(name = "afiliacion_paciente")
+    @NotEmpty
     @Size(max = 30)
+    @Column(name = "afiliacion_paciente")
     private String afiliacionPaciente;
 
-    @Column(name = "medio_pago")
+    @NotEmpty
     @Size(max = 30)
+    @Column(name = "medio_pago")
     private String medioPago;
 
     @Column(name = "monto_pago")
@@ -32,7 +37,7 @@ public class Pago implements Serializable {
     @Column(name = "cantidad_horas_pagadas")
     private int cantidadHorasPagadas;
 
-    @Column(nullable = false)
+    @NotEmpty
     @Size(max = 15)
     private String estado;
 
