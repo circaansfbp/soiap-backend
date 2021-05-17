@@ -161,6 +161,11 @@ public class PacienteService implements IPacienteService {
                     paciente.getAnamnesis()
             );
 
+            // Actualiza la ficha de tratamiento del paciente
+            if (pacienteToUpdate.getFichaTratamiento() != paciente.getFichaTratamiento()) pacienteToUpdate.setFichaTratamiento(
+                    paciente.getFichaTratamiento()
+            );
+
             pacienteRepository.save(pacienteToUpdate);
             return pacienteToUpdate;
         } else

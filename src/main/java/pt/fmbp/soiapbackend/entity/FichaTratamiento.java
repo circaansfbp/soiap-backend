@@ -1,8 +1,15 @@
 package pt.fmbp.soiapbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,31 +22,42 @@ public class FichaTratamiento implements Serializable {
     @Column(name = "id_ficha", nullable = false, updatable = false)
     private Long idFichaTratamiento;
 
-    @Column(name = "motivo_consulta_profesional", nullable = false)
+    @NotEmpty
+    @Size(max = 2000)
+    @Column(name = "motivo_consulta_profesional")
     private String motivoConsultaProfesional;
 
-    @Column(name = "fecha_diagnostico", nullable = false)
-    @Temporal(value = TemporalType.DATE)
-    private Date fechaDiagnostico;
+    @NotNull
+    @Column(name = "fecha_diagnostico")
+    private LocalDate fechaDiagnostico;
 
-    @Column(name = "resultado_diagnostico", nullable = false)
+    @NotEmpty
+    @Size(max = 2000)
+    @Column(name = "resultado_diagnostico")
     private String resultadoDiagnostico;
 
-    @Column(name = "sugerencia_tratamiento", nullable = false)
+    @NotEmpty
+    @Size(max = 2000)
+    @Column(name = "sugerencia_tratamiento")
     private String sugerenciaTratamiento;
 
-    @Column(name = "objetivos_terapia", nullable = false)
+    @NotEmpty
+    @Size(max = 2000)
+    @Column(name = "objetivos_terapia")
     private String objetivosTerapia;
 
-    @Column(nullable = false)
+    @NotEmpty
+    @Size(max = 15)
     private String estado;
 
+    @JsonIgnoreProperties(value = {"fichaTratamiento", "hibernateLazyInitializer", "handler"}, allowSetters = true)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "fichaTratamiento", cascade = CascadeType.ALL)
+    @NotFound(action = NotFoundAction.IGNORE)
     private List<SesionTerapia> sesionesDeTerapia;
 
     public FichaTratamiento() { }
 
-    public FichaTratamiento(Long idFichaTratamiento, String motivoConsultaProfesional, Date fechaDiagnostico,
+    public FichaTratamiento(Long idFichaTratamiento, String motivoConsultaProfesional, LocalDate fechaDiagnostico,
                             String resultadoDiagnostico, String sugerenciaTratamiento, String objetivosTerapia) {
         this.idFichaTratamiento = idFichaTratamiento;
         this.motivoConsultaProfesional = motivoConsultaProfesional;
@@ -47,6 +65,12 @@ public class FichaTratamiento implements Serializable {
         this.resultadoDiagnostico = resultadoDiagnostico;
         this.sugerenciaTratamiento = sugerenciaTratamiento;
         this.objetivosTerapia = objetivosTerapia;
+        this.estado = "Activo";
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.fechaDiagnostico = LocalDate.now();
         this.estado = "Activo";
     }
 
@@ -62,11 +86,11 @@ public class FichaTratamiento implements Serializable {
         this.motivoConsultaProfesional = motivoConsultaProfesional;
     }
 
-    public Date getFechaDiagnostico() {
+    public LocalDate getFechaDiagnostico() {
         return fechaDiagnostico;
     }
 
-    public void setFechaDiagnostico(Date fechaDiagnostico) {
+    public void setFechaDiagnostico(LocalDate fechaDiagnostico) {
         this.fechaDiagnostico = fechaDiagnostico;
     }
 

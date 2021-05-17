@@ -1,5 +1,7 @@
 package pt.fmbp.soiapbackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -26,6 +28,7 @@ public class SesionTerapia implements Serializable {
     @Column(nullable = false)
     private String estado;
 
+    @JsonIgnoreProperties({"sesionesDeTerapia", "hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ficha")
     private FichaTratamiento fichaTratamiento;

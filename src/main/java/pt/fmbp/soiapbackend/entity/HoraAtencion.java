@@ -1,6 +1,5 @@
 package pt.fmbp.soiapbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -47,6 +46,7 @@ public class HoraAtencion implements Serializable {
     private int nroConsulta;
 
     @JsonIgnoreProperties({"atenciones", "hibernateLazyInitializer", "handler"})
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_paciente")
     private Paciente paciente;
