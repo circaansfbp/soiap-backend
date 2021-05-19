@@ -54,4 +54,22 @@ public class FichaTratamientoService implements IFichaTratamientoService {
         else
             return null;
     }
+
+    // Eliminación lógica de una ficha de tratamiento
+    @Override
+    @Transactional
+    public FichaTratamiento deleteFichaTratamiento(Long idFichaTratamiento) {
+        if (idFichaTratamiento != null && idFichaTratamiento != 0) {
+            FichaTratamiento fichaToDelete = getFichaTratamientoById(idFichaTratamiento);
+
+            if (fichaToDelete != null) {
+                fichaToDelete.setEstado("Inactivo");
+                return fichaTratamientoRepository.save(fichaToDelete);
+            }
+            else
+                return null;
+        }
+        else
+            return null;
+    }
 }

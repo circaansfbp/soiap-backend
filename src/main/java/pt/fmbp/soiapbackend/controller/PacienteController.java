@@ -40,6 +40,39 @@ public class PacienteController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    // Buscar pacientes por nombre entre todos los pacientes (activos e inactivos), paginados
+    @GetMapping("/get/all/by-name/page/{pageNumber}")
+    public ResponseEntity<Page<Paciente>> searchInAllPatientsByName(@PathVariable(value = "pageNumber") Integer nroPagina,
+                                                                    @RequestParam String nombre) {
+        Page pageOfPatientsNamed = pacienteService.getPacientesByName(nombre, PageRequest.of(nroPagina, 5));
+
+        if (!pageOfPatientsNamed.isEmpty()) return new ResponseEntity<>(pageOfPatientsNamed, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Buscar pacientes por apellido entre todos los pacientes (activos e inactivos), paginados
+    @GetMapping("/get/all/by-lastname/page/{pageNumber}")
+    public ResponseEntity<Page<Paciente>> searchInAllPatientsByLastname(@PathVariable(value = "pageNumber") Integer nroPagina,
+                                                                        @RequestParam String apellido) {
+        Page pageOfPatientsWithLastname = pacienteService.getPacientesByLastname(apellido, PageRequest.of(nroPagina, 5));
+
+        if(!pageOfPatientsWithLastname.isEmpty()) return new ResponseEntity<>(pageOfPatientsWithLastname, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Buscar pacientes por nombre y apellido entre todos los pacientes (activos e inactivos), paginados
+    @GetMapping("/get/all/by-name-lastname/page/{pageNumber}")
+    public ResponseEntity<Page<Paciente>> searchInAllPatientsByNameAndLastname(@PathVariable(value = "pageNumber") Integer nroPagina,
+                                                                               @RequestParam String nombre, @RequestParam String apellido) {
+        Page pageOfPatients = pacienteService.getPacientesByNameAndLastname(nombre, apellido, PageRequest.of(nroPagina, 5));
+
+        if (!pageOfPatients.isEmpty()) return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     // Obtener uno o más pacientes activos, por nombre, paginados
     @GetMapping("/get/by-name/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesPorNombre (@PathVariable(value = "pageNumber") Integer nroPagina,

@@ -9,4 +9,7 @@ public interface IFichaTratamientoService {
 
     // Actualizar una ficha de tratamiento
     FichaTratamiento updateFichaTratamiento(FichaTratamiento fichaTratamiento, Long idFichaTratamiento);
+
+    // Eliminación lógica de una ficha de tratamiento
+    FichaTratamiento deleteFichaTratamiento(Long idFichaTratamiento);
 }

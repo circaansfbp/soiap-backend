@@ -23,4 +23,14 @@ public class AnamnesisController {
         } else
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    // Eliminación lógica de una anamnesis
+    @PutMapping("/delete/{idAnamnesis}")
+    public ResponseEntity<Anamnesis> deleteAnamnesis(@PathVariable(value = "idAnamnesis") Long idAnamnesis) {
+        if (idAnamnesis != null && idAnamnesis != 0) {
+            return new ResponseEntity<>(anamnesisService.deleteAnamnesis(idAnamnesis), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

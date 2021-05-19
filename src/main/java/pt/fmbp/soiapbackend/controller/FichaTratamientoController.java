@@ -24,4 +24,14 @@ public class FichaTratamientoController {
          else
              return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    // Eliminación lógica de una ficha de tratamiento
+    @PutMapping("/delete/{idFichaTratamiento}")
+    public ResponseEntity<FichaTratamiento> deleteFichaTratamiento(@PathVariable(value = "idFichaTratamiento") Long idFichaTratamiento) {
+        if (idFichaTratamiento != null && idFichaTratamiento != 0) {
+            return new ResponseEntity<>(fichaTratamientoService.deleteFichaTratamiento(idFichaTratamiento), HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

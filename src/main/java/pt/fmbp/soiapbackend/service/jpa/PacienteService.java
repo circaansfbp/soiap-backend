@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pt.fmbp.soiapbackend.entity.HoraAtencion;
 import pt.fmbp.soiapbackend.entity.Paciente;
 import pt.fmbp.soiapbackend.repository.IPacienteRepository;
 import pt.fmbp.soiapbackend.service.IPacienteService;
@@ -27,7 +26,7 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
-    // Obtener uno o más pacientes por un nombre, paginados
+    // Buscar paciente(s) por nombre entre todos los pacientes (activos e inactivos), paginados
     @Override
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientesByName(String name, Pageable pageable) {
@@ -35,6 +34,26 @@ public class PacienteService implements IPacienteService {
         else
             return null;
     }
+
+    // Buscar paciente(s) por apellido entre todos los pacientes (activos e inactivos), paginados
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientesByLastname(String apellido, Pageable pageable) {
+        if (apellido != null) return pacienteRepository.findAllByApellidoContaining(apellido, pageable);
+        else
+            return null;
+    }
+
+    // Buscar paciente(s) por nombre y apellido entre todos los pacientes (activos e inactivos), paginados
+    @Override
+    public Page<Paciente> getPacientesByNameAndLastname(String nombre, String apellido, Pageable pageable) {
+        if (nombre != null && apellido != null) {
+            return pacienteRepository.findAllByNombreContainingAndApellidoContaining(nombre, apellido, pageable);
+        }
+        else
+            return null;
+    }
+
 
     // Obtener uno o más pacientes activos por nombre, sin paginar
     @Override

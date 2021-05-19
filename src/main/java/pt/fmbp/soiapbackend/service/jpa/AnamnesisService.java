@@ -56,4 +56,22 @@ public class AnamnesisService implements IAnamnesisService {
         }
         else return null;
     }
+
+    // Eliminación lógica de una anamnesis
+    @Override
+    @Transactional
+    public Anamnesis deleteAnamnesis(Long idAnamnesis) {
+        if (idAnamnesis != null && idAnamnesis != 0) {
+            Anamnesis anamnesisToDelete = getAnamnesisById(idAnamnesis);
+
+            if (anamnesisToDelete != null) {
+                anamnesisToDelete.setEstado("Inactivo");
+                return anamnesisRepository.save(anamnesisToDelete);
+            }
+            else
+                return null;
+        }
+        else
+            return null;
+    }
 }

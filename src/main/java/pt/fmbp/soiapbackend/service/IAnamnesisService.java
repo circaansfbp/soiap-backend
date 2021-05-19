@@ -9,4 +9,7 @@ public interface IAnamnesisService {
 
     // Actualizar una anamnesis
     Anamnesis updateAnamnesis(Anamnesis anamnesis, Long idAnamnesis);
+
+    // Eliminación lógica de una anamnesis
+    Anamnesis deleteAnamnesis(Long idAnamnesis);
 }
