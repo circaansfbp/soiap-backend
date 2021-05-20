@@ -10,6 +10,11 @@ import java.util.List;
 
 @Repository
 public interface IPacienteRepository extends JpaRepository<Paciente, Long> {
+
+    // Retorna pacientes de acuerdo a su estado
+    // SELECT * FROM paciente WHERE estado = ? (Retornar solo los pacientes activos)
+    Page<Paciente> findAllByEstado(String estado, Pageable pageable);
+
     // Obtiene todos los pacientes por nombre, paginados
     // SELECT * FROM paciente WHERE nombre LIKE = %?% (Pacientes paginados)
     Page<Paciente> findAllByNombreContaining(String nombre, Pageable pageable);
@@ -29,10 +34,6 @@ public interface IPacienteRepository extends JpaRepository<Paciente, Long> {
     // Obtiene los pacientes activos por nombre, paginados
     // SELECT * FROM paciente WHERE estado = ? AND nombre LIKE = %?%
     Page<Paciente> findAllByEstadoAndNombreContaining(String estado, String nombre, Pageable pageable);
-
-    // Obtiene todos los pacientes activos
-    // SELECT * FROM paciente WHERE estado = ? (Retornar solo los pacientes activos)
-    Page<Paciente> findAllByEstado(String estado, Pageable pageable);
 
     // Obtiene todos los pacientes activos, por apellido, sin paginar
     // SELECT * FROM paciente WHERE estado = ? AND apellido LIKE = %?%

@@ -26,6 +26,20 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
+    // Obtener todos los pacientes activos (que no han sido eliminados), paginados
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientesActivos(Pageable pageable) {
+        return pacienteRepository.findAllByEstado("Activo", pageable);
+    }
+
+    // Obtener todos los pacientes inactivos, paginados
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Paciente> getPacientesInactivos(Pageable pageable) {
+        return pacienteRepository.findAllByEstado("Inactivo", pageable);
+    }
+
     // Buscar paciente(s) por nombre entre todos los pacientes (activos e inactivos), paginados
     @Override
     @Transactional(readOnly = true)
@@ -54,7 +68,6 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
-
     // Obtener uno o más pacientes activos por nombre, sin paginar
     @Override
     @Transactional(readOnly = true)
@@ -64,11 +77,11 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
-    // Obtener uno o más pacientes por nombre, que se encuentren con estado 'Activo', paginados
+    // Obtener uno o más pacientes por nombre y estado, paginados
     @Override
     @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesByNameActivos(String name, Pageable pageable) {
-        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining("Activo", name, pageable);
+    public Page<Paciente> getPacientesByNameAndEstado(String estado, String name, Pageable pageable) {
+        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining(estado, name, pageable);
         else
             return null;
     }
@@ -82,11 +95,11 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
-    // Obtener uno o más pacientes activos por su apellido, paginados
+    // Obtener uno o más pacientes por su apellido y estado, paginados
     @Override
     @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesActivosPorApellido(String apellido, Pageable pageable) {
-        if (apellido != null) return pacienteRepository.findAllByEstadoAndApellidoContaining("Activo", apellido, pageable);
+    public Page<Paciente> getPacientesPorApellidoAndEstado(String estado, String apellido, Pageable pageable) {
+        if (apellido != null) return pacienteRepository.findAllByEstadoAndApellidoContaining(estado, apellido, pageable);
         else
             return null;
     }
@@ -101,12 +114,12 @@ public class PacienteService implements IPacienteService {
             return null;
     }
 
-    // Obtener uno o más pacientes activos por su nombre y apellido, paginados
+    // Obtener uno o más pacientes por su nombre, apellido y estado, paginados
     @Override
     @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesActivosPorNombreApellido(String nombre, String apellido, Pageable pageable) {
+    public Page<Paciente> getPacientesPorNombreApellidoAndEstado(String estado, String nombre, String apellido, Pageable pageable) {
         if (nombre != null && apellido != null) return pacienteRepository.
-                findAllByEstadoAndNombreContainingAndApellidoContaining("Activo", nombre, apellido, pageable);
+                findAllByEstadoAndNombreContainingAndApellidoContaining(estado, nombre, apellido, pageable);
         else
             return null;
     }
@@ -123,13 +136,6 @@ public class PacienteService implements IPacienteService {
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientes(Pageable pageable) {
         return pacienteRepository.findAll(pageable);
-    }
-
-    // Obtener todos los pacientes activos (que no han sido eliminados), paginados
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesActivos(Pageable pageable) {
-        return pacienteRepository.findAllByEstado("Activo", pageable);
     }
 
     // Actualizar un paciente
@@ -201,6 +207,20 @@ public class PacienteService implements IPacienteService {
             patientToDelete.setEstado("Inactivo");
             pacienteRepository.save(patientToDelete);
             return patientToDelete;
+        }
+        else
+            return null;
+    }
+
+    // Reintegrar un paciente a la consulta (de INACTIVO a ACTIVO)
+    @Override
+    @Transactional
+    public Paciente reintegrarPaciente(Long idPaciente) {
+        Paciente pacienteToIntegrate = getPacienteById(idPaciente);
+
+        if (pacienteToIntegrate != null) {
+            pacienteToIntegrate.setEstado("Activo");
+            return pacienteRepository.save(pacienteToIntegrate);
         }
         else
             return null;
