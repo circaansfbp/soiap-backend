@@ -12,4 +12,7 @@ public interface IAnamnesisService {
 
     // Eliminación lógica de una anamnesis
     Anamnesis deleteAnamnesis(Long idAnamnesis);
+
+    // Recuperación lógica de una anamnesis
+    Anamnesis reintegrarAnamnesis(Long idAnamnesis);
 }

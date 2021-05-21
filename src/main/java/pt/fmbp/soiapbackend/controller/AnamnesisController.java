@@ -33,4 +33,18 @@ public class AnamnesisController {
         else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    // Reintegración lógica de una anamnesis
+    @PutMapping("/integrate/{idAnamnesis}")
+    public ResponseEntity<Anamnesis> reintegrarAnamnesis(@PathVariable(value = "idAnamnesis") Long idAnamnesis) {
+        if (idAnamnesis != 0 && idAnamnesis != null) {
+            Anamnesis anamnesisToIntegrate = anamnesisService.reintegrarAnamnesis(idAnamnesis);
+
+            if (anamnesisToIntegrate != null) return new ResponseEntity<>(anamnesisToIntegrate, HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

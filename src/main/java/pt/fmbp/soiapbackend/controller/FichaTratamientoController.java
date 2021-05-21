@@ -34,4 +34,18 @@ public class FichaTratamientoController {
         else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    // Reintegración lógica de una ficha de tratamiento
+    @PutMapping("/integrate/{idFichaTratamiento}")
+    public ResponseEntity<FichaTratamiento> reintegrarFichaTratamiento(@PathVariable(value = "idFichaTratamiento") Long idFichaTratamiento) {
+        if (idFichaTratamiento != null && idFichaTratamiento != 0) {
+            FichaTratamiento fichaToIntegrate = fichaTratamientoService.reintegrarFichaTratamiento(idFichaTratamiento);
+
+            if (fichaToIntegrate != null) return new ResponseEntity<>(fichaToIntegrate, HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }

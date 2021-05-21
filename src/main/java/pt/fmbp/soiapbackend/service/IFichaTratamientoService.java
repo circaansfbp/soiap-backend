@@ -12,4 +12,7 @@ public interface IFichaTratamientoService {
 
     // Eliminación lógica de una ficha de tratamiento
     FichaTratamiento deleteFichaTratamiento(Long idFichaTratamiento);
+
+    // Reintegración lógica de una ficha de tratamiento
+    FichaTratamiento reintegrarFichaTratamiento(Long idFichaTratamiento);
 }

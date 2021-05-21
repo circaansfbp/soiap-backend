@@ -8,9 +8,7 @@ import pt.fmbp.soiapbackend.entity.HoraAtencion;
 import pt.fmbp.soiapbackend.service.IHoraAtencionService;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @RestController

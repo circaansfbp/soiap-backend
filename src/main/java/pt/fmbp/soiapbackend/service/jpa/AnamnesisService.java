@@ -74,4 +74,22 @@ public class AnamnesisService implements IAnamnesisService {
         else
             return null;
     }
+
+    // Para reintegrar lógicamente una anamnesis
+    @Override
+    @Transactional
+    public Anamnesis reintegrarAnamnesis(Long idAnamnesis) {
+        if (idAnamnesis != 0 && idAnamnesis != null) {
+            Anamnesis anamnesisToIntegrate = getAnamnesisById(idAnamnesis);
+
+            if (anamnesisToIntegrate != null) {
+                anamnesisToIntegrate.setEstado("Activo");
+                return anamnesisRepository.save(anamnesisToIntegrate);
+            }
+            else
+                return null;
+        }
+        else
+            return null;
+    }
 }

@@ -1,19 +1,13 @@
 package pt.fmbp.soiapbackend.service.jpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
 import pt.fmbp.soiapbackend.repository.IHoraAtencionRepository;
 import pt.fmbp.soiapbackend.service.IHoraAtencionService;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,7 +25,7 @@ public class HoraAtencionService implements IHoraAtencionService {
             List<HoraAtencion> horasExistentes = getHorasPorFecha(horaAtencion.getFechaAtencion());
 
             for (HoraAtencion hora : horasExistentes) {
-                if (hora.getHoraAtencion() == horaAtencion.getHoraAtencion()) {
+                if (hora.getHoraAtencion().equals(horaAtencion.getHoraAtencion())) {
                     return null;
                 }
             }

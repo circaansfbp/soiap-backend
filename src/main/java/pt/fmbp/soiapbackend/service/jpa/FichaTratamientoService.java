@@ -72,4 +72,22 @@ public class FichaTratamientoService implements IFichaTratamientoService {
         else
             return null;
     }
+
+    // Reintegración lógica de una ficha de tratamiento
+    @Override
+    @Transactional
+    public FichaTratamiento reintegrarFichaTratamiento(Long idFichaTratamiento) {
+        if (idFichaTratamiento != null && idFichaTratamiento != 0) {
+            FichaTratamiento fichaToIntegrate = getFichaTratamientoById(idFichaTratamiento);
+
+            if (fichaToIntegrate != null) {
+                fichaToIntegrate.setEstado("Activo");
+                return fichaTratamientoRepository.save(fichaToIntegrate);
+            }
+            else
+                return null;
+        }
+        else
+            return null;
+    }
 }
