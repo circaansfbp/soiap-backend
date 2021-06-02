@@ -3,8 +3,11 @@ package pt.fmbp.soiapbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -19,15 +22,19 @@ public class SesionTerapia implements Serializable {
     @Column(name = "nro_sesion")
     private int nroSesion;
 
+    @NotNull
     @Column(name = "fecha_sesion")
-    @Temporal(value = TemporalType.DATE)
-    private Date fechaSesion;
+    private LocalDate fechaSesion;
 
+    @NotEmpty
+    @Size(max = 3000)
     private String observaciones;
 
+    @NotEmpty
     @Column(nullable = false)
     private String estado;
 
+    @NotNull
     @JsonIgnoreProperties({"sesionesDeTerapia", "hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ficha")
@@ -35,13 +42,19 @@ public class SesionTerapia implements Serializable {
 
     public SesionTerapia() { }
 
-    public SesionTerapia(Long idSesion, int nroSesion, Date fechaSesion, String observaciones, FichaTratamiento fichaTratamiento) {
+    public SesionTerapia(Long idSesion, int nroSesion, LocalDate fechaSesion, String observaciones, FichaTratamiento fichaTratamiento) {
         this.idSesion = idSesion;
         this.nroSesion = nroSesion;
         this.fechaSesion = fechaSesion;
         this.observaciones = observaciones;
         this.estado = "Activo";
         this.fichaTratamiento = fichaTratamiento;
+    }
+
+    @PrePersist
+    private void prePersist() {
+        this.estado = "Activo";
+        this.fechaSesion = LocalDate.now();
     }
 
     public Long getIdSesion() {
@@ -56,11 +69,11 @@ public class SesionTerapia implements Serializable {
         this.nroSesion = nroSesion;
     }
 
-    public Date getFechaSesion() {
+    public LocalDate getFechaSesion() {
         return fechaSesion;
     }
 
-    public void setFechaSesion(Date fechaSesion) {
+    public void setFechaSesion(LocalDate fechaSesion) {
         this.fechaSesion = fechaSesion;
     }
 
