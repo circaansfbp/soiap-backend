@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.fmbp.soiapbackend.entity.Paciente;
+import pt.fmbp.soiapbackend.entity.SesionTerapia;
 import pt.fmbp.soiapbackend.repository.IPacienteRepository;
 import pt.fmbp.soiapbackend.service.IPacienteService;
 
@@ -204,9 +205,27 @@ public class PacienteService implements IPacienteService {
         Paciente patientToDelete = getPacienteById(idPaciente);
 
         if (patientToDelete != null) {
+
+            // Se setea como 'Inactivo' al paciente
             patientToDelete.setEstado("Inactivo");
-            pacienteRepository.save(patientToDelete);
-            return patientToDelete;
+
+            // Eliminación lógica de su anamnesis
+            if (patientToDelete.getAnamnesis() != null) patientToDelete.getAnamnesis().setEstado("Inactivo");
+
+            // Eliminación lógica de su ficha de tratamiento
+            if (patientToDelete.getFichaTratamiento() != null) {
+                patientToDelete.getFichaTratamiento().setEstado("Inactivo");
+
+                // Se setean como inactivas las sesiones de terapia que tenga que el paciente
+                if (patientToDelete.getFichaTratamiento().getSesionesDeTerapia().size() > 0 || patientToDelete.getFichaTratamiento().getSesionesDeTerapia() != null) {
+                    for (SesionTerapia sesion : patientToDelete.getFichaTratamiento().getSesionesDeTerapia()) {
+                        sesion.setEstado("Inactivo");
+                    }
+                }
+            }
+
+            // Se guardan los cambios y se retorna el paciente eliminado
+            return pacienteRepository.save(patientToDelete);
         }
         else
             return null;
@@ -219,7 +238,26 @@ public class PacienteService implements IPacienteService {
         Paciente pacienteToIntegrate = getPacienteById(idPaciente);
 
         if (pacienteToIntegrate != null) {
+
+            // Se reintegra el paciente
             pacienteToIntegrate.setEstado("Activo");
+
+            // Si existe una anamnesis registrada, esta es reintegrada
+            if (pacienteToIntegrate.getAnamnesis() != null) pacienteToIntegrate.getAnamnesis().setEstado("Activo");
+
+            // Si existe una ficha de tratamiento registrada, esta es reintegrada
+            if (pacienteToIntegrate.getFichaTratamiento() != null) {
+                pacienteToIntegrate.getFichaTratamiento().setEstado("Activo");
+
+                // Si existen sesiones de terapia registradas, estas son reintegradas
+                if (pacienteToIntegrate.getFichaTratamiento().getSesionesDeTerapia() != null || pacienteToIntegrate.getFichaTratamiento().getSesionesDeTerapia().size() > 0) {
+                    for (SesionTerapia sesion : pacienteToIntegrate.getFichaTratamiento().getSesionesDeTerapia()) {
+                        sesion.setEstado("Activo");
+                    }
+                }
+            }
+
+            // Se guardan los cambios
             return pacienteRepository.save(pacienteToIntegrate);
         }
         else

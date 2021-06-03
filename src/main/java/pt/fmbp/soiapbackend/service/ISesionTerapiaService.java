@@ -12,7 +12,4 @@ public interface ISesionTerapiaService {
 
     // Actualizar una sesión de terapia
     SesionTerapia updateSesionTerapia(SesionTerapia sesionTerapia, Long idSesion);
-
-    // Eliminación lógica de las sesiones de terapia del paciente
-    void deletedSessions(SesionTerapia[] sesiones);
 }

@@ -56,15 +56,4 @@ public class SesionTerapiaService implements ISesionTerapiaService {
         }
         else return null;
     }
-
-    // Eliminación lógica de las sesiones de terapia de un paciente.
-    @Override
-    @Transactional
-    public void deletedSessions(SesionTerapia[] sesiones) {
-        for (SesionTerapia sesion : sesiones) {
-            SesionTerapia sessionToDelete = getSesionTerapiaById(sesion.getIdSesion());
-            sessionToDelete.setEstado("Inactivo");
-            sesionTerapiaRepository.save(sessionToDelete);
-        }
-    }
 }
