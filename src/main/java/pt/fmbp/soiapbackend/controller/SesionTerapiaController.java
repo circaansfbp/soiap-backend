@@ -3,10 +3,7 @@ package pt.fmbp.soiapbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pt.fmbp.soiapbackend.entity.SesionTerapia;
 import pt.fmbp.soiapbackend.service.ISesionTerapiaService;
 
@@ -16,6 +13,15 @@ public class SesionTerapiaController {
 
     @Autowired
     private ISesionTerapiaService sesionTerapiaService;
+
+    // Obtener una sesión de terapia específica
+    @GetMapping("/{idSesion}")
+    public ResponseEntity<SesionTerapia> getSesionById(@PathVariable(value = "idSesion") Long idSesion) {
+        if (idSesion != null && idSesion != 0) {
+            return new ResponseEntity<>(sesionTerapiaService.getSesionTerapiaById(idSesion), HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 
     // Crear una nueva sesión de terapia
     @PostMapping("")
@@ -30,5 +36,20 @@ public class SesionTerapiaController {
             else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Actualizar una sesión de terapia
+    @PutMapping("/update/{idSesion}")
+    public ResponseEntity<SesionTerapia> updateSesionTerapia(@PathVariable(value = "idSesion") Long idSesion,
+                                                             @RequestBody SesionTerapia sesionTerapia) {
+        if (sesionTerapia != null && idSesion != null && idSesion != 0) {
+            SesionTerapia sesionToUpdate = sesionTerapiaService.updateSesionTerapia(sesionTerapia, idSesion);
+
+            if (sesionToUpdate != null) {
+                return new ResponseEntity<>(sesionToUpdate, HttpStatus.OK);
+            }
+            else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

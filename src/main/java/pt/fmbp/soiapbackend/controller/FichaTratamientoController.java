@@ -14,6 +14,15 @@ public class FichaTratamientoController {
     @Autowired
     private FichaTratamientoService fichaTratamientoService;
 
+    // Obtener una ficha de tratamiento por su ID
+    @GetMapping("/{idFichaTratamiento}")
+    public ResponseEntity<FichaTratamiento> getFichaById(@PathVariable(value = "idFichaTratamiento") Long idFichaTratamiento) {
+        if (idFichaTratamiento != null && idFichaTratamiento != 0) {
+            return new ResponseEntity<>(fichaTratamientoService.getFichaTratamientoById(idFichaTratamiento), HttpStatus.OK);
+        }
+        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
     // Actualizar una ficha de tratamiento
     @PutMapping("/update/{idFichaTratamiento}")
     public ResponseEntity<FichaTratamiento> updateFichaTratamiento (@PathVariable(value = "idFichaTratamiento") Long idFichaTratamiento,

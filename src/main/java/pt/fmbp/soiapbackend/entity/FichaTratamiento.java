@@ -52,7 +52,6 @@ public class FichaTratamiento implements Serializable {
 
     @JsonIgnoreProperties(value = {"fichaTratamiento", "hibernateLazyInitializer", "handler"}, allowSetters = true)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "fichaTratamiento", cascade = CascadeType.ALL)
-    @NotFound(action = NotFoundAction.IGNORE)
     private List<SesionTerapia> sesionesDeTerapia;
 
     public FichaTratamiento() { }
