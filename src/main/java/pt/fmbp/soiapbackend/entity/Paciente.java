@@ -81,7 +81,6 @@ public class Paciente implements Serializable {
     @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_ficha")
-    //@NotFound(action = NotFoundAction.IGNORE)
     private FichaTratamiento fichaTratamiento;
 
 

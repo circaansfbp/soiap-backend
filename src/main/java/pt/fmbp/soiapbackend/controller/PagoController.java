@@ -14,7 +14,7 @@ public class PagoController {
     @Autowired
     private IPagoService pagoService;
 
-    // Crear un pago (INNECESARIO?)
+    // Crear un pago
     @PostMapping("")
     public ResponseEntity<Pago> registerPayment(@RequestBody Pago pago) {
         Pago pagoRealizado = pagoService.registerPayment(pago);
