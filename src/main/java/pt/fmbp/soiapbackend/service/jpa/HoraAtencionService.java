@@ -5,13 +5,13 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
-import pt.fmbp.soiapbackend.entity.Paciente;
 import pt.fmbp.soiapbackend.repository.IHoraAtencionRepository;
+import pt.fmbp.soiapbackend.service.IEmailNotificationService;
 import pt.fmbp.soiapbackend.service.IHoraAtencionService;
 
+import javax.mail.MessagingException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +19,9 @@ public class HoraAtencionService implements IHoraAtencionService {
 
     @Autowired
     private IHoraAtencionRepository horaAtencionRepository;
+
+    @Autowired
+    private IEmailNotificationService emailNotificationService;
 
     // Guardar un nuevo horario de atención
     @Override
@@ -101,31 +104,20 @@ public class HoraAtencionService implements IHoraAtencionService {
 
     // Envío de recordatorio de un horario de atención
     @Transactional
-    @Scheduled(cron = "0 35 11 * * 1-5")
-    public void sendScheduledEmailNotification() {
+    @Scheduled(cron = "0 34 13 * * 1-5")
+    public void sendScheduledEmailNotification() throws MessagingException {
         // Para obtener el día actual
         LocalDate today = LocalDate.now();
         List<HoraAtencion> appointmentsToNotify;
 
-        if (!today.getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
-            appointmentsToNotify = getHorasPorFecha(today.plusDays(1));
-
-            if (!appointmentsToNotify.isEmpty()) {
-                for (HoraAtencion appointment : appointmentsToNotify) {
-                    // Lógica de envío de correo electrónico
-                    System.out.println("Hoy NO ES VIERNES!");
-                }
-            }
-        }
-        else {
+        if (!today.getDayOfWeek().equals(DayOfWeek.FRIDAY)) appointmentsToNotify = getHorasPorFecha(today.plusDays(1));
+        else
             appointmentsToNotify = getHorasPorFecha(today.plusDays(3));
 
-            if (!appointmentsToNotify.isEmpty()) {
-                for (HoraAtencion appointment : appointmentsToNotify) {
-                    // Lógica de envío de correo electrónico
-                    System.out.println("HOY ES VIERNES!!!!");
-                }
-            }
+
+        if (!appointmentsToNotify.isEmpty()) {
+            this.emailNotificationService
+                    .sendEmailNotification(appointmentsToNotify);
         }
     }
 }

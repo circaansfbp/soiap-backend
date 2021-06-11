@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
 
+import javax.mail.MessagingException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Date;
@@ -27,5 +28,5 @@ public interface IHoraAtencionService {
     void deleteHoraAtencion (Long idAtencion);
 
     // Envío de recordatorio mediante e-mail
-    void sendScheduledEmailNotification();
+    void sendScheduledEmailNotification() throws MessagingException;
 }
