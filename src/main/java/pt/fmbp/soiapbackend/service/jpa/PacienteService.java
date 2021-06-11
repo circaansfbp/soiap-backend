@@ -158,6 +158,10 @@ public class PacienteService implements IPacienteService {
             if (!pacienteToUpdate.getTelefono().equals(paciente.getTelefono()))
                 pacienteToUpdate.setTelefono("+569" + paciente.getTelefono());
 
+            // Actualiza el e-mail
+            if (!pacienteToUpdate.getEmail().equals(paciente.getEmail()))
+                pacienteToUpdate.setEmail(paciente.getEmail());
+
             // Actualiza fecha de nacimiento
             if (pacienteToUpdate.getFechaNacimiento() != paciente.getFechaNacimiento())
                 pacienteToUpdate.setFechaNacimiento(paciente.getFechaNacimiento());

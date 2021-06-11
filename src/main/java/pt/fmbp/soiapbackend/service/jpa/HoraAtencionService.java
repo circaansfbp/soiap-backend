@@ -1,13 +1,17 @@
 package pt.fmbp.soiapbackend.service.jpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
+import pt.fmbp.soiapbackend.entity.Paciente;
 import pt.fmbp.soiapbackend.repository.IHoraAtencionRepository;
 import pt.fmbp.soiapbackend.service.IHoraAtencionService;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -93,5 +97,35 @@ public class HoraAtencionService implements IHoraAtencionService {
     @Transactional
     public void deleteHoraAtencion(Long idAtencion) {
         horaAtencionRepository.deleteById(idAtencion);
+    }
+
+    // Envío de recordatorio de un horario de atención
+    @Transactional
+    @Scheduled(cron = "0 35 11 * * 1-5")
+    public void sendScheduledEmailNotification() {
+        // Para obtener el día actual
+        LocalDate today = LocalDate.now();
+        List<HoraAtencion> appointmentsToNotify;
+
+        if (!today.getDayOfWeek().equals(DayOfWeek.FRIDAY)) {
+            appointmentsToNotify = getHorasPorFecha(today.plusDays(1));
+
+            if (!appointmentsToNotify.isEmpty()) {
+                for (HoraAtencion appointment : appointmentsToNotify) {
+                    // Lógica de envío de correo electrónico
+                    System.out.println("Hoy NO ES VIERNES!");
+                }
+            }
+        }
+        else {
+            appointmentsToNotify = getHorasPorFecha(today.plusDays(3));
+
+            if (!appointmentsToNotify.isEmpty()) {
+                for (HoraAtencion appointment : appointmentsToNotify) {
+                    // Lógica de envío de correo electrónico
+                    System.out.println("HOY ES VIERNES!!!!");
+                }
+            }
+        }
     }
 }

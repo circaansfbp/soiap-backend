@@ -25,4 +25,7 @@ public interface IHoraAtencionService {
 
     // Eliminar una hora de atención
     void deleteHoraAtencion (Long idAtencion);
+
+    // Envío de recordatorio mediante e-mail
+    void sendScheduledEmailNotification();
 }

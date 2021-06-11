@@ -34,8 +34,8 @@ public class SesionTerapia implements Serializable {
     @Column(nullable = false)
     private String estado;
 
-    @NotNull
     @JsonIgnoreProperties({"sesionesDeTerapia", "hibernateLazyInitializer", "handler"})
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ficha")
     private FichaTratamiento fichaTratamiento;

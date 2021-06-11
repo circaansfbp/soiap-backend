@@ -22,6 +22,7 @@ public class FichaTratamiento implements Serializable {
     @Column(name = "id_ficha", nullable = false, updatable = false)
     private Long idFichaTratamiento;
 
+
     @NotEmpty
     @Size(max = 2000)
     @Column(name = "motivo_consulta_profesional")
@@ -50,7 +51,7 @@ public class FichaTratamiento implements Serializable {
     @Size(max = 15)
     private String estado;
 
-    @JsonIgnoreProperties(value = {"fichaTratamiento", "hibernateLazyInitializer", "handler"}, allowSetters = true)
+    @JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"}, allowSetters = true)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "fichaTratamiento", cascade = CascadeType.ALL)
     private List<SesionTerapia> sesionesDeTerapia;
 

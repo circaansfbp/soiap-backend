@@ -1,25 +1,19 @@
 package pt.fmbp.soiapbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-
-import javax.annotation.processing.Generated;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Paciente")
 public class Paciente implements Serializable {
-
-    // REALIZAR VALIDACIONES DE CAMPOS QUE NO DEBEN SER NULOS
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +31,9 @@ public class Paciente implements Serializable {
     @NotEmpty
     @Size(min = 12, max = 12)
     private String telefono;
+
+    @Email
+    private String email;
 
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
@@ -59,7 +56,7 @@ public class Paciente implements Serializable {
 
 
     @Column(name = "familia_nuclear")
-    @Size(max = 255)
+    @Size(max = 1000)
     private String familiaNuclear;
 
     @NotEmpty
@@ -86,13 +83,14 @@ public class Paciente implements Serializable {
 
     public Paciente () { this.atenciones = new ArrayList<>(); }
 
-    public Paciente(Long idPaciente, String nombre, String apellido, String telefono, LocalDate fechaNacimiento,
+    public Paciente(Long idPaciente, String nombre, String apellido, String telefono, String email, LocalDate fechaNacimiento,
                     String ocupacion, String institucion, String afiliacionSalud, String estadoCivil, String familiaNuclear,
                     String estado, List<HoraAtencion> atenciones, FichaTratamiento fichaTratamiento, Anamnesis anamnesis) {
         this.idPaciente = idPaciente;
         this.nombre = nombre;
         this.apellido = apellido;
         this.telefono = telefono;
+        this.email = email;
         this.fechaNacimiento = fechaNacimiento;
         this.ocupacion = ocupacion;
         this.institucion = institucion;
@@ -137,6 +135,14 @@ public class Paciente implements Serializable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LocalDate getFechaNacimiento() {
@@ -224,12 +230,12 @@ public class Paciente implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Paciente)) return false;
         Paciente paciente = (Paciente) o;
-        return Objects.equals(idPaciente, paciente.idPaciente) && Objects.equals(nombre, paciente.nombre) && Objects.equals(apellido, paciente.apellido) && Objects.equals(telefono, paciente.telefono) && Objects.equals(fechaNacimiento, paciente.fechaNacimiento) && Objects.equals(ocupacion, paciente.ocupacion) && Objects.equals(institucion, paciente.institucion) && Objects.equals(afiliacionSalud, paciente.afiliacionSalud) && Objects.equals(estadoCivil, paciente.estadoCivil) && Objects.equals(familiaNuclear, paciente.familiaNuclear) && Objects.equals(estado, paciente.estado) && Objects.equals(atenciones, paciente.atenciones) && Objects.equals(fichaTratamiento, paciente.fichaTratamiento) && Objects.equals(anamnesis, paciente.anamnesis);
+        return Objects.equals(idPaciente, paciente.idPaciente) && Objects.equals(nombre, paciente.nombre) && Objects.equals(apellido, paciente.apellido) && Objects.equals(telefono, paciente.telefono) && Objects.equals(email, paciente.email) && Objects.equals(fechaNacimiento, paciente.fechaNacimiento) && Objects.equals(ocupacion, paciente.ocupacion) && Objects.equals(institucion, paciente.institucion) && Objects.equals(afiliacionSalud, paciente.afiliacionSalud) && Objects.equals(estadoCivil, paciente.estadoCivil) && Objects.equals(familiaNuclear, paciente.familiaNuclear) && Objects.equals(estado, paciente.estado) && Objects.equals(atenciones, paciente.atenciones) && Objects.equals(anamnesis, paciente.anamnesis) && Objects.equals(fichaTratamiento, paciente.fichaTratamiento);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idPaciente, nombre, apellido, telefono, fechaNacimiento, ocupacion, institucion, afiliacionSalud, estadoCivil, familiaNuclear, estado, atenciones, fichaTratamiento, anamnesis);
+        return Objects.hash(idPaciente, nombre, apellido, telefono, email, fechaNacimiento, ocupacion, institucion, afiliacionSalud, estadoCivil, familiaNuclear, estado, atenciones, anamnesis, fichaTratamiento);
     }
 
     @Override
@@ -239,6 +245,7 @@ public class Paciente implements Serializable {
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
                 ", telefono='" + telefono + '\'' +
+                ", email='" + email + '\'' +
                 ", fechaNacimiento=" + fechaNacimiento +
                 ", ocupacion='" + ocupacion + '\'' +
                 ", institucion='" + institucion + '\'' +
@@ -247,8 +254,8 @@ public class Paciente implements Serializable {
                 ", familiaNuclear='" + familiaNuclear + '\'' +
                 ", estado='" + estado + '\'' +
                 ", atenciones=" + atenciones +
-                ", fichaTratamiento=" + fichaTratamiento +
                 ", anamnesis=" + anamnesis +
+                ", fichaTratamiento=" + fichaTratamiento +
                 '}';
     }
 }
