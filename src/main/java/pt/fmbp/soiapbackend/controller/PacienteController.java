@@ -1,15 +1,16 @@
 package pt.fmbp.soiapbackend.controller;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import pt.fmbp.soiapbackend.entity.Paciente;
 import pt.fmbp.soiapbackend.service.IPacienteService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class PacienteController {
 
     // Crear un nuevo paciente
     @PostMapping("")
-    public ResponseEntity<Paciente> savePaciente (@RequestBody Paciente paciente) {
+    public ResponseEntity<Paciente> savePaciente (@Valid @RequestBody Paciente paciente) {
         if (paciente != null) {
             Paciente patientToCreate = pacienteService.savePaciente(paciente);
             return new ResponseEntity<>(patientToCreate, HttpStatus.CREATED);
@@ -210,7 +211,7 @@ public class PacienteController {
 
     // Actualizar los datos de un paciente
     @PutMapping("/update/{idPaciente}")
-    public ResponseEntity<Paciente> updatePaciente (@RequestBody Paciente paciente, @PathVariable (value = "idPaciente") Long idPaciente) {
+    public ResponseEntity<Paciente> updatePaciente (@Valid @RequestBody Paciente paciente, @PathVariable (value = "idPaciente") Long idPaciente) {
         Paciente updatedPatient = pacienteService.updatePaciente(paciente, idPaciente);
 
         if (updatedPatient == null) {

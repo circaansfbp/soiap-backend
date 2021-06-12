@@ -1,9 +1,11 @@
 package pt.fmbp.soiapbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -20,47 +22,57 @@ public class Paciente implements Serializable {
     @Column(name = "id_paciente", nullable = false, updatable = false)
     private Long idPaciente;
 
-    @NotEmpty
-    @Size(min = 3, max = 30)
+    @NotEmpty(message = "El nombre del paciente no puede estar vacío.")
+    @Size(min = 3, max = 30, message = "El nombre debe contener entre 3 y 30 caracteres.")
+    @Pattern(regexp = "^(?!\\s)^[a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s]+$",
+            message = "El nombre del paciente no debe comenzar con un espacio en blanco, ni contener caracteres especiales o números.")
     private String nombre;
 
-    @NotEmpty
-    @Size(min = 3, max = 30)
+    @NotEmpty(message = "El apellido del paciente no puede estar vacío")
+    @Size(min = 3, max = 30, message = "El apellido debe contener entre 3 y 30 caracteres.")
+    @Pattern(regexp = "^(?!\\s)^[a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s]+$",
+            message = "El apellido del paciente no debe comenzar con un espacio en blanco, ni contener caracteres especiales o números.")
     private String apellido;
 
-    @NotEmpty
-    @Size(min = 12, max = 12)
+    @NotEmpty(message = "El número de teléfono del paciente no puede estar vacío.")
+    @Size(min = 8, max = 12, message = "El teléfono debe contener un total de 8 caracteres.")
     private String telefono;
 
-    @Email
+    @Email(message = "Debe ingresar un e-mail válido.")
     private String email;
 
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
-    @Size(max = 30)
+    @Size(max = 100, message = "La ocupación/profesión del paciente debe tener un máximo de 100 caracteres.")
+    @Pattern(regexp = "^(?!\\s)^[a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s]+$",
+            message = "Ocupación del paciente: no se permite el ingreso de un espacio en blanco al comienzo, ni de dígitos o caracteres especiales.")
     private String ocupacion;
 
-    @Size(max = 30)
+    @Size(max = 100, message = "La institución a la que pertenece el paciente debe tener un máximo de 100 caracteres.")
+    @Pattern(regexp = "^(?!\\s)^[0-9a-zA-ZÀ-ÿ-\\u00f1\\u00d1\\s]+$",
+            message = "Institución del paciente: no se permite el ingreso de un espacio en blanco al comienzo, ni de caracteres especiales.")
     private String institucion;
 
-    @NotEmpty
+    @NotEmpty(message = "La afiliación de salud del paciente no puede estar vacía.")
     @Column(name = "afiliacion_salud")
-    @Size(max = 30)
+    @Size(max = 100, message = "El nombre de la afiliación de salud del paciente debe contener un máximo de 100 caracteres.")
+    @Pattern(regexp = "^(?!\\s)^[0-9a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s]+$",
+            message = "Afiliación de salud del paciente: no se permite el ingreso de un espacio en blanco al comienzo, ni de dígitos o caracteres especiales.")
     private String afiliacionSalud;
 
 
     @Column(name = "estado_civil")
-    @Size(max = 30)
+    @Size(max = 100, message = "El estado civil del paciente debe contener un máximo de 100 caracteres.")
+    @Pattern(regexp = "^(?!\\s)^[a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s]+$",
+            message = "Estado civil del paciente: no se permite el ingreso de un espacio en blanco al comienzo, ni de dígitos o caracteres especiales.")
     private String estadoCivil;
 
 
     @Column(name = "familia_nuclear")
-    @Size(max = 1000)
+    @Size(max = 1000, message = "Solo se permite un máximo de 1000 caracteres para la descripción de la familia nuclear del paciente")
     private String familiaNuclear;
 
-    @NotEmpty
-    @Size(max = 15)
     private String estado;
 
     // Atenciones del paciente
@@ -81,7 +93,9 @@ public class Paciente implements Serializable {
     private FichaTratamiento fichaTratamiento;
 
 
-    public Paciente () { this.atenciones = new ArrayList<>(); }
+    public Paciente() {
+        this.atenciones = new ArrayList<>();
+    }
 
     public Paciente(Long idPaciente, String nombre, String apellido, String telefono, String email, LocalDate fechaNacimiento,
                     String ocupacion, String institucion, String afiliacionSalud, String estadoCivil, String familiaNuclear,
@@ -104,7 +118,7 @@ public class Paciente implements Serializable {
     }
 
     @PrePersist
-    private void PrePersist () {
+    private void PrePersist() {
         this.estado = "Activo";
         this.telefono = "+569" + this.telefono;
     }
