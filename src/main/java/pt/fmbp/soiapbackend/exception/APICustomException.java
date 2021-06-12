@@ -16,6 +16,11 @@ public class APICustomException {
         this.httpStatus = httpStatus;
     }
 
+    public APICustomException(String message, HttpStatus httpStatus) {
+        this.message = message;
+        this.httpStatus = httpStatus;
+    }
+
     public String getMessage() {
         return message;
     }

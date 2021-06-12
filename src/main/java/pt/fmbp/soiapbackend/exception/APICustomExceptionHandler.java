@@ -3,6 +3,7 @@ package pt.fmbp.soiapbackend.exception;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +19,17 @@ import java.util.List;
 @ControllerAdvice
 public class APICustomExceptionHandler extends ResponseEntityExceptionHandler  {
     private HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+    private HttpStatus noContent = HttpStatus.NO_CONTENT;
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                  HttpHeaders headers, HttpStatus status,
+                                                                  WebRequest request) {
+
+        APICustomException exception = new APICustomException("El cuerpo de la petición no ha sido detectado, o es inválido",
+                noContent);
+        return new ResponseEntity<>(exception, noContent);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
