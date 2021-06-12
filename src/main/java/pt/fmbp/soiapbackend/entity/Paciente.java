@@ -45,13 +45,9 @@ public class Paciente implements Serializable {
     private LocalDate fechaNacimiento;
 
     @Size(max = 100, message = "La ocupación/profesión del paciente debe tener un máximo de 100 caracteres.")
-    @Pattern(regexp = "^(?!\\s)^[a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s]+$",
-            message = "Ocupación del paciente: no se permite el ingreso de un espacio en blanco al comienzo, ni de dígitos o caracteres especiales.")
     private String ocupacion;
 
     @Size(max = 100, message = "La institución a la que pertenece el paciente debe tener un máximo de 100 caracteres.")
-    @Pattern(regexp = "^(?!\\s)^[0-9a-zA-ZÀ-ÿ-\\u00f1\\u00d1\\s]+$",
-            message = "Institución del paciente: no se permite el ingreso de un espacio en blanco al comienzo, ni de caracteres especiales.")
     private String institucion;
 
     @NotEmpty(message = "La afiliación de salud del paciente no puede estar vacía.")
@@ -64,8 +60,6 @@ public class Paciente implements Serializable {
 
     @Column(name = "estado_civil")
     @Size(max = 100, message = "El estado civil del paciente debe contener un máximo de 100 caracteres.")
-    @Pattern(regexp = "^(?!\\s)^[a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s]+$",
-            message = "Estado civil del paciente: no se permite el ingreso de un espacio en blanco al comienzo, ni de dígitos o caracteres especiales.")
     private String estadoCivil;
 
 

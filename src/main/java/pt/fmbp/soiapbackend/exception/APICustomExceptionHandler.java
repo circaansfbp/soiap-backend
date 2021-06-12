@@ -25,10 +25,12 @@ public class APICustomExceptionHandler extends ResponseEntityExceptionHandler  {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
+        List<String> errorDetail = new ArrayList<>();
+        errorDetail.add(ex.getLocalizedMessage());
 
         APICustomException exception = new APICustomException("El cuerpo de la petición no ha sido detectado, o es inválido",
-                noContent);
-        return new ResponseEntity<>(exception, noContent);
+                errorDetail, badRequest);
+        return new ResponseEntity<>(exception, badRequest);
     }
 
     @Override
