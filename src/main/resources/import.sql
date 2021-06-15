@@ -62,3 +62,13 @@ INSERT INTO sesion_terapia(nro_sesion, fecha_sesion, observaciones, estado, id_f
 
 UPDATE paciente SET id_ficha = 1 WHERE id_paciente = 1;
 UPDATE paciente SET id_ficha = 2 WHERE id_paciente = 2;
+
+INSERT INTO usuario(username, password, enabled) VALUES('', '', 1);
+INSERT INTO usuario(username, password, enabled) VALUES('', '', 1);
+
+INSERT INTO rol(nombre) VALUES('ROLE_PSICOLOGO_TRATANTE');
+INSERT INTO rol(nombre) VALUES('ROLE_COLABORADOR');
+
+INSERT INTO usuario_rol(user_id, rol_id) VALUES(1, 1);
+INSERT INTO usuario_rol(user_id, rol_id) VALUES(1, 2);
+INSERT INTO usuario_rol(user_id, rol_id) VALUES(2, 2);
