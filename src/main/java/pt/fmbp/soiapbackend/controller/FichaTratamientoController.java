@@ -3,6 +3,7 @@ package pt.fmbp.soiapbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import pt.fmbp.soiapbackend.entity.FichaTratamiento;
 import pt.fmbp.soiapbackend.service.jpa.FichaTratamientoService;
@@ -15,6 +16,7 @@ public class FichaTratamientoController {
     private FichaTratamientoService fichaTratamientoService;
 
     // Obtener una ficha de tratamiento por su ID
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @GetMapping("/{idFichaTratamiento}")
     public ResponseEntity<FichaTratamiento> getFichaById(@PathVariable(value = "idFichaTratamiento") Long idFichaTratamiento) {
         if (idFichaTratamiento != null && idFichaTratamiento != 0) {
@@ -24,6 +26,7 @@ public class FichaTratamientoController {
     }
 
     // Actualizar una ficha de tratamiento
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("/update/{idFichaTratamiento}")
     public ResponseEntity<FichaTratamiento> updateFichaTratamiento (@PathVariable(value = "idFichaTratamiento") Long idFichaTratamiento,
                                                                     @RequestBody FichaTratamiento fichaTratamiento) {
@@ -35,6 +38,7 @@ public class FichaTratamientoController {
     }
 
     // Eliminación lógica de una ficha de tratamiento
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("/delete/{idFichaTratamiento}")
     public ResponseEntity<FichaTratamiento> deleteFichaTratamiento(@PathVariable(value = "idFichaTratamiento") Long idFichaTratamiento) {
         if (idFichaTratamiento != null && idFichaTratamiento != 0) {
@@ -45,6 +49,7 @@ public class FichaTratamientoController {
     }
 
     // Reintegración lógica de una ficha de tratamiento
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("/integrate/{idFichaTratamiento}")
     public ResponseEntity<FichaTratamiento> reintegrarFichaTratamiento(@PathVariable(value = "idFichaTratamiento") Long idFichaTratamiento) {
         if (idFichaTratamiento != null && idFichaTratamiento != 0) {

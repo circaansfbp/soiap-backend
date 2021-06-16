@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import pt.fmbp.soiapbackend.entity.Paciente;
@@ -22,6 +22,7 @@ public class PacienteController {
     private IPacienteService pacienteService;
 
     // Crear un nuevo paciente
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @PostMapping("")
     public ResponseEntity<Paciente> savePaciente (@Valid @RequestBody Paciente paciente) {
         if (paciente != null) {
@@ -32,6 +33,7 @@ public class PacienteController {
     }
 
     // Obtener un paciente por su ID
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/{idPaciente}")
     public ResponseEntity<Paciente> getPaciente (@PathVariable(value = "idPaciente") Long idPaciente) {
         Paciente patientToReturn  = pacienteService.getPacienteById(idPaciente);
@@ -44,6 +46,7 @@ public class PacienteController {
     }
 
     // Obtener todos los pacientes activos, paginados
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientes (@PathVariable(value = "pageNumber") Integer nroPagina) {
         Page pageOfPatients = pacienteService.getPacientesActivos(PageRequest.of(nroPagina, 5));
@@ -54,6 +57,7 @@ public class PacienteController {
     }
 
     // Obtener todos los pacientes inactivos, paginados
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @GetMapping("/get/inactive/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesInactivos (@PathVariable(value = "pageNumber") Integer nroPagina) {
         Page inactivePatients = pacienteService.getPacientesInactivos(PageRequest.of(nroPagina, 5));
@@ -64,6 +68,7 @@ public class PacienteController {
     }
 
     // Buscar pacientes por nombre entre todos los pacientes (activos e inactivos), paginados
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/all/by-name/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> searchInAllPatientsByName(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                     @RequestParam String nombre) {
@@ -75,6 +80,7 @@ public class PacienteController {
     }
 
     // Buscar pacientes por apellido entre todos los pacientes (activos e inactivos), paginados
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/all/by-lastname/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> searchInAllPatientsByLastname(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                         @RequestParam String apellido) {
@@ -86,6 +92,7 @@ public class PacienteController {
     }
 
     // Buscar pacientes por nombre y apellido entre todos los pacientes (activos e inactivos), paginados
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/all/by-name-lastname/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> searchInAllPatientsByNameAndLastname(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                                @RequestParam String nombre, @RequestParam String apellido) {
@@ -97,6 +104,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes activos, por nombre, paginados
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-name/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesPorNombre (@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                 @RequestParam String nombre) {
@@ -108,6 +116,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes activos, por nombre, sin paginar
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-name")
     public ResponseEntity<List<Paciente>> getPacientesPorNombreSinPaginar (@RequestParam String nombre) {
         List patientsNamed = pacienteService.getPacientesActivosPorNombreSinPaginar(nombre);
@@ -118,6 +127,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes inactivos, por nombre, paginados
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @GetMapping("/get/inactive/by-name/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesInactivosPorNombre(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                          @RequestParam String nombre) {
@@ -129,6 +139,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes inactivos, por apellido, paginados
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @GetMapping("/get/inactive/by-lastname/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesInactivosPorApellido(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                            @RequestParam String apellido) {
@@ -140,6 +151,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes inactivos, por nombre y apellido, paginados
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @GetMapping("/get/inactive/by-name-lastname/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesInactivosPorNombreApellido(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                                  @RequestParam String nombre,
@@ -153,6 +165,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes activos, por apellido, paginados
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-lastname/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesPorApellido (@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                                @RequestParam String apellido) {
@@ -168,6 +181,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes activos, por apellido, sin paginar
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-lastname")
     public ResponseEntity<List<Paciente>> getPacientesPorApellidoSinPaginar (@RequestParam String apellido) {
         if (apellido != null) {
@@ -182,6 +196,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes activos, por nombre y apellido, paginados
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-name-lastname/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesPorNombreApellido(@PathVariable(value = "pageNumber") Integer nroPagina, @RequestParam String nombre,
                                                                         @RequestParam String apellido) {
@@ -197,6 +212,7 @@ public class PacienteController {
     }
 
     // Obtener uno o más pacientes activos, por nombre y apellido, sin paginar
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-name-lastname")
     public ResponseEntity<List<Paciente>> getPacientesPorNombreApellidoSinPaginar(@RequestParam String nombre, @RequestParam String apellido) {
         if (nombre != null && apellido != null) {
@@ -211,6 +227,7 @@ public class PacienteController {
     }
 
     // Actualizar los datos de un paciente
+    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @PutMapping("/update/{idPaciente}")
     public ResponseEntity<Paciente> updatePaciente (@Valid @RequestBody Paciente paciente, @PathVariable (value = "idPaciente") Long idPaciente) {
         Paciente updatedPatient = pacienteService.updatePaciente(paciente, idPaciente);
@@ -222,6 +239,7 @@ public class PacienteController {
     }
 
     // Eliminación lógica de un paciente
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("delete/{idPaciente}")
     public ResponseEntity<Paciente> deletePaciente(@PathVariable(value = "idPaciente") Long idPaciente) {
         Paciente patientToDelete = pacienteService.deletePaciente(idPaciente);
@@ -232,6 +250,7 @@ public class PacienteController {
     }
 
     // Reintegrar un paciente a la consulta (de INACTIVO a ACTIVO)
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("integrate/{idPaciente}")
     public ResponseEntity<Paciente> reintegrarPaciente(@PathVariable(value = "idPaciente") Long idPaciente) {
         Paciente pacienteToIntegrate = pacienteService.reintegrarPaciente(idPaciente);

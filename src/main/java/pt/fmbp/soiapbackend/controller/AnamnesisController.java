@@ -3,6 +3,7 @@ package pt.fmbp.soiapbackend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import pt.fmbp.soiapbackend.entity.Anamnesis;
 import pt.fmbp.soiapbackend.service.IAnamnesisService;
@@ -15,6 +16,7 @@ public class AnamnesisController {
     private IAnamnesisService anamnesisService;
 
     // Actualizar una anamnesis
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("/update/{idAnamnesis}")
     public ResponseEntity<Anamnesis> updateAnamnesis(@PathVariable(value = "idAnamnesis") Long idAnamnesis,
                                                      @RequestBody Anamnesis anamnesis) {
@@ -25,6 +27,7 @@ public class AnamnesisController {
     }
 
     // Eliminación lógica de una anamnesis
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("/delete/{idAnamnesis}")
     public ResponseEntity<Anamnesis> deleteAnamnesis(@PathVariable(value = "idAnamnesis") Long idAnamnesis) {
         if (idAnamnesis != null && idAnamnesis != 0) {
@@ -35,6 +38,7 @@ public class AnamnesisController {
     }
 
     // Reintegración lógica de una anamnesis
+    @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("/integrate/{idAnamnesis}")
     public ResponseEntity<Anamnesis> reintegrarAnamnesis(@PathVariable(value = "idAnamnesis") Long idAnamnesis) {
         if (idAnamnesis != 0 && idAnamnesis != null) {

@@ -39,8 +39,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     /** Registra uno por uno los clientes que conectarán con esta API */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory().withClient("soiap-frontend")
-                .secret(passwordEncoder.encode("SOIAPfrontEND"))
+        clients.inMemory().withClient("")
+                .secret(passwordEncoder.encode(""))
                 .scopes("read", "write").authorizedGrantTypes("password", "refresh_token")
                 .accessTokenValiditySeconds(43200)
                 .refreshTokenValiditySeconds(43200);
