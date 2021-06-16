@@ -13,12 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.fmbp.soiapbackend.entity.Usuario;
 import pt.fmbp.soiapbackend.repository.IUsuarioRepository;
+import pt.fmbp.soiapbackend.service.IUsuarioService;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService implements UserDetailsService, IUsuarioService {
     // Para manejar errores
     private Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
@@ -43,5 +44,11 @@ public class UsuarioService implements UserDetailsService {
 
         return new User(user.getUsername(), user.getPassword(), user.isEnabled(), true,
                 true, true, authorities);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Usuario getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }

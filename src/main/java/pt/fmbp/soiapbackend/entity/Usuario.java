@@ -14,6 +14,12 @@ public class Usuario implements Serializable {
     @Column(name = "user_id")
     private Long userId;
 
+    @Size(min = 3, max = 30)
+    private String nombre;
+
+    @Size(min = 3, max = 30)
+    private String apellido;
+
     @Column(unique = true)
     @Size(max = 20)
     private String username;
@@ -34,6 +40,22 @@ public class Usuario implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
     public String getUsername() {
