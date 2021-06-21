@@ -26,7 +26,7 @@ public class SesionTerapia implements Serializable {
     @Column(name = "fecha_sesion")
     private LocalDate fechaSesion;
 
-    @NotEmpty
+    @NotEmpty(message = "Las observaciones no pueden estar vacías")
     @Size(max = 3000)
     private String observaciones;
 

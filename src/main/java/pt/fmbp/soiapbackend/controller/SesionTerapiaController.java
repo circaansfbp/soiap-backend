@@ -20,7 +20,7 @@ public class SesionTerapiaController {
     @GetMapping("/{idSesion}")
     public ResponseEntity<SesionTerapia> getSesionById(@PathVariable(value = "idSesion") Long idSesion) {
         if (idSesion != null && idSesion != 0) {
-            return new ResponseEntity<>(sesionTerapiaService.getSesionTerapiaById(idSesion), HttpStatus.OK);
+            return new ResponseEntity<>(sesionTerapiaService.getSesionTerapiaById(idSesion), HttpStatus.CREATED);
         }
         else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

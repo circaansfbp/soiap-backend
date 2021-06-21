@@ -5,8 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pt.fmbp.soiapbackend.entity.HoraAtencion;
 import pt.fmbp.soiapbackend.entity.Paciente;
 import pt.fmbp.soiapbackend.entity.SesionTerapia;
+import pt.fmbp.soiapbackend.exception.ResourceDeletedException;
+import pt.fmbp.soiapbackend.exception.ResourceDeletionNotPossibleException;
 import pt.fmbp.soiapbackend.repository.IPacienteRepository;
 import pt.fmbp.soiapbackend.service.IPacienteService;
 
@@ -213,6 +216,18 @@ public class PacienteService implements IPacienteService {
     @Transactional
     public Paciente deletePaciente(Long idPaciente) {
         Paciente patientToDelete = getPacienteById(idPaciente);
+
+        if (patientToDelete.getEstado().equalsIgnoreCase("Inactivo")) {
+            throw new ResourceDeletedException("El paciente ya se encuentra registrado como 'Inactivo'.");
+        }
+
+        if (!patientToDelete.getAtenciones().isEmpty()) {
+            for (HoraAtencion atencion : patientToDelete.getAtenciones()) {
+                if (atencion.getPago() == null) {
+                    throw new ResourceDeletionNotPossibleException("El paciente no puede ser eliminado. Presenta atenciones impagadas");
+                }
+            }
+        }
 
         if (patientToDelete != null) {
 

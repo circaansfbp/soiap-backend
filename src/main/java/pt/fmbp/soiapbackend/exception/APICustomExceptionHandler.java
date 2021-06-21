@@ -20,6 +20,7 @@ import java.util.List;
 public class APICustomExceptionHandler extends ResponseEntityExceptionHandler  {
     private HttpStatus badRequest = HttpStatus.BAD_REQUEST;
     private HttpStatus noContent = HttpStatus.NO_CONTENT;
+    private HttpStatus notFound = HttpStatus.NOT_FOUND;
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
@@ -56,6 +57,38 @@ public class APICustomExceptionHandler extends ResponseEntityExceptionHandler  {
         }
 
         APICustomException exception = new APICustomException("Error de restricción", errorDetails, badRequest);
+        return new ResponseEntity<>(exception, badRequest);
+    }
+
+    @ExceptionHandler(value = {AppointmentConflictException.class})
+    public ResponseEntity<Object> handleAppointmentConflictException(AppointmentConflictException ex) {
+        HttpStatus conflict = HttpStatus.CONFLICT;
+        APICustomException exception = new APICustomException(ex.getMessage(), conflict);
+
+        return new ResponseEntity<>(exception, conflict);
+    }
+
+    @ExceptionHandler(value = {PatientNotFoundException.class})
+    public ResponseEntity<Object> handlePatientNotFoundException(PatientNotFoundException ex) {
+        APICustomException exception = new APICustomException(ex.getMessage(), notFound);
+        return new ResponseEntity<>(exception, notFound);
+    }
+
+    @ExceptionHandler(value = {MissingIdException.class})
+    public ResponseEntity<Object> handleMissingIdException(MissingIdException ex) {
+        APICustomException exception = new APICustomException(ex.getMessage(), badRequest);
+        return new ResponseEntity<>(exception, badRequest);
+    }
+
+    @ExceptionHandler(value = {ResourceDeletedException.class})
+    public ResponseEntity<Object> handleResourceDeletedException(ResourceDeletedException ex) {
+        APICustomException exception = new APICustomException(ex.getMessage(), badRequest);
+        return new ResponseEntity<>(exception, badRequest);
+    }
+
+    @ExceptionHandler(value = {ResourceDeletionNotPossibleException.class})
+    public ResponseEntity<Object> handleResourceDeletionNotPossibleException(ResourceDeletionNotPossibleException ex) {
+        APICustomException exception = new APICustomException(ex.getMessage(), badRequest);
         return new ResponseEntity<>(exception, badRequest);
     }
 }

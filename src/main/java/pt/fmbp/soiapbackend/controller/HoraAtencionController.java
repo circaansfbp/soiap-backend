@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
+import pt.fmbp.soiapbackend.exception.APICustomException;
+import pt.fmbp.soiapbackend.exception.AppointmentConflictException;
 import pt.fmbp.soiapbackend.service.IHoraAtencionService;
 
 import java.text.ParseException;
@@ -27,7 +29,9 @@ public class HoraAtencionController {
             HoraAtencion horaAtencionCreada = horaAtencionService.saveHoraAtencion(horaAtencion);
 
             // Si la hora y fecha de la atención provista coincide con una ya existente
-            if (horaAtencionCreada == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+            if (horaAtencionCreada == null) {
+                throw new AppointmentConflictException("La hora o fecha de la atención ingresada ya se encuentra registrada.");
+            }
             else
                 return new ResponseEntity<>(horaAtencionCreada, HttpStatus.CREATED);
         } else

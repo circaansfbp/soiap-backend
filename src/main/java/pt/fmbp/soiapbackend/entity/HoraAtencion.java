@@ -32,11 +32,11 @@ public class HoraAtencion implements Serializable {
     @Column(name = "confirma_asistencia")
     private int confirmaAsistencia;
 
-    @NotNull
+    @NotNull(message = "La hora de la atención no puede estar vacía.")
     @Column(name = "hora_atencion")
     private LocalTime horaAtencion;
 
-    @NotNull
+    @NotNull(message = "La fecha de la atención no puede estar vacía")
     @Column(name = "fecha_atencion", nullable = false)
     private LocalDate fechaAtencion;
 
@@ -46,7 +46,7 @@ public class HoraAtencion implements Serializable {
     private int nroConsulta;
 
     @JsonIgnoreProperties({"atenciones", "hibernateLazyInitializer", "handler"})
-    @NotNull
+    @NotNull(message = "Se debe asociar un paciente al horario de atención.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_paciente")
     private Paciente paciente;

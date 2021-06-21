@@ -21,12 +21,12 @@ public class Pago implements Serializable {
     @Column(name = "fecha_pago")
     private LocalDate fechaPago;
 
-    @NotEmpty
+    @NotEmpty(message = "Se debe ingresar la afiliación de salud del paciente, asociada al pago ingresado.")
     @Size(max = 30)
     @Column(name = "afiliacion_paciente")
     private String afiliacionPaciente;
 
-    @NotEmpty
+    @NotEmpty(message = "Se debe ingresar el medio de pago (bonos, bonos y programa o efectivo).")
     @Size(max = 30)
     @Column(name = "medio_pago")
     private String medioPago;

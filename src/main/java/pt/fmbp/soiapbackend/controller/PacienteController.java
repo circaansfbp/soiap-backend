@@ -9,6 +9,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import pt.fmbp.soiapbackend.entity.Paciente;
+import pt.fmbp.soiapbackend.exception.MissingIdException;
+import pt.fmbp.soiapbackend.exception.PatientNotFoundException;
 import pt.fmbp.soiapbackend.service.IPacienteService;
 
 import javax.validation.Valid;
@@ -242,11 +244,15 @@ public class PacienteController {
     @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("delete/{idPaciente}")
     public ResponseEntity<Paciente> deletePaciente(@PathVariable(value = "idPaciente") Long idPaciente) {
+        if (idPaciente == null || idPaciente == 0) {
+            throw new MissingIdException("Se debe ingresar un identificador válido.");
+        }
+
         Paciente patientToDelete = pacienteService.deletePaciente(idPaciente);
 
         if (patientToDelete != null) return new ResponseEntity<>(patientToDelete, HttpStatus.OK);
         else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new PatientNotFoundException("El identificador del paciente ingresado no se encuentra registrado en el sistema.");
     }
 
     // Reintegrar un paciente a la consulta (de INACTIVO a ACTIVO)
