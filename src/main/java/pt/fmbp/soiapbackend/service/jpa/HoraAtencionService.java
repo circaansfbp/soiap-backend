@@ -104,7 +104,7 @@ public class HoraAtencionService implements IHoraAtencionService {
 
     // Envío de recordatorio de un horario de atención
     @Transactional
-    @Scheduled(cron = "0 34 13 * * 1-5")
+    @Scheduled(cron = "0 00 17 * * 1-5")
     public void sendScheduledEmailNotification() throws MessagingException {
         // Para obtener el día actual
         LocalDate today = LocalDate.now();

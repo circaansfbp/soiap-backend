@@ -25,7 +25,7 @@ public class EmailNotificationService implements IEmailNotificationService {
             if (horaAtencion.getPaciente().getEmail() != null && horaAtencion.getPaciente().getEmail() != " ") {
                 SimpleMailMessage msg = new SimpleMailMessage();
 
-                msg.setFrom("pt.fmbp.soiap2021@gmail.com");
+                msg.setFrom("");
                 msg.setTo(horaAtencion.getPaciente().getEmail());
                 msg.setSubject("Recordatorio hora de atención psicológica.");
                 msg.setText(

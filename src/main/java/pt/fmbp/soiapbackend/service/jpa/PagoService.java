@@ -41,11 +41,6 @@ public class PagoService implements IPagoService {
             Pago paymentToUpdate = getPaymentById(idPago);
 
             if (paymentToUpdate != null) {
-                // Actualiza la afiliación de salud del paciente que está asociada al pago realizado
-                if (!paymentToUpdate.getAfiliacionPaciente().equalsIgnoreCase(pago.getAfiliacionPaciente())) paymentToUpdate.setAfiliacionPaciente(
-                        pago.getAfiliacionPaciente()
-                );
-
                 // Actualiza el medio de pago
                 if (!paymentToUpdate.getMedioPago().equalsIgnoreCase(pago.getMedioPago())) paymentToUpdate.setMedioPago(
                         pago.getMedioPago()
@@ -70,14 +65,5 @@ public class PagoService implements IPagoService {
                 return null;
         } else
             return null;
-    }
-
-    // Eliminación física de un pago
-    @Override
-    @Transactional
-    public void deletePayment(Long idPago) {
-        if (idPago != 0 && idPago != null) {
-            pagoRepository.deleteById(idPago);
-        }
     }
 }

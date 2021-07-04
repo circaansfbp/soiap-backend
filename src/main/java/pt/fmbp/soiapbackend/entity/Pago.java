@@ -21,11 +21,6 @@ public class Pago implements Serializable {
     @Column(name = "fecha_pago")
     private LocalDate fechaPago;
 
-    @NotEmpty(message = "Se debe ingresar la afiliación de salud del paciente, asociada al pago ingresado.")
-    @Size(max = 30)
-    @Column(name = "afiliacion_paciente")
-    private String afiliacionPaciente;
-
     @NotEmpty(message = "Se debe ingresar el medio de pago (bonos, bonos y programa o efectivo).")
     @Size(max = 30)
     @Column(name = "medio_pago")
@@ -70,14 +65,6 @@ public class Pago implements Serializable {
         this.fechaPago = fechaPago;
     }
 
-    public String getAfiliacionPaciente() {
-        return afiliacionPaciente;
-    }
-
-    public void setAfiliacionPaciente(String afiliacionPaciente) {
-        this.afiliacionPaciente = afiliacionPaciente;
-    }
-
     public String getMedioPago() {
         return medioPago;
     }
@@ -115,12 +102,12 @@ public class Pago implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Pago)) return false;
         Pago pago = (Pago) o;
-        return cantidadHorasPagadas == pago.cantidadHorasPagadas && Objects.equals(idPago, pago.idPago) && Objects.equals(fechaPago, pago.fechaPago) && Objects.equals(afiliacionPaciente, pago.afiliacionPaciente) && Objects.equals(medioPago, pago.medioPago) && Objects.equals(montoPago, pago.montoPago) && Objects.equals(estado, pago.estado);
+        return cantidadHorasPagadas == pago.cantidadHorasPagadas && Objects.equals(idPago, pago.idPago) && Objects.equals(fechaPago, pago.fechaPago)  && Objects.equals(medioPago, pago.medioPago) && Objects.equals(montoPago, pago.montoPago) && Objects.equals(estado, pago.estado);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idPago, fechaPago, afiliacionPaciente, medioPago, montoPago, cantidadHorasPagadas, estado);
+        return Objects.hash(idPago, fechaPago, medioPago, montoPago, cantidadHorasPagadas, estado);
     }
 
     @Override
@@ -128,7 +115,6 @@ public class Pago implements Serializable {
         return "Pago{" +
                 "idPago=" + idPago +
                 ", fechaPago=" + fechaPago +
-                ", afiliacionPaciente='" + afiliacionPaciente + '\'' +
                 ", medioPago='" + medioPago + '\'' +
                 ", montoPago=" + montoPago +
                 ", cantidadHorasPagadas=" + cantidadHorasPagadas +

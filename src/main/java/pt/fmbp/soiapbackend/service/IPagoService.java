@@ -12,7 +12,4 @@ public interface IPagoService {
 
     // Actualizar un pago
     Pago updatePayment(Long idPago, Pago pago);
-
-    // Eliminación lógica de un pago
-    void deletePayment(Long idPago);
 }

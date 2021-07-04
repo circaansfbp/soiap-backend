@@ -46,15 +46,4 @@ public class PagoController {
         else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
-    // Eliminación de un pago (ES NECESARIO?)
-    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
-    @PutMapping("/delete/{idPago}")
-    public ResponseEntity<Pago> deletePayment(@PathVariable(value = "idPago") Long idPago) {
-        if (idPago != null && idPago != 0) {
-            pagoService.deletePayment(idPago);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
 }
