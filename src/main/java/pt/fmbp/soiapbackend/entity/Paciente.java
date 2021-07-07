@@ -57,11 +57,9 @@ public class Paciente implements Serializable {
             message = "Afiliación de salud del paciente: no se permite el ingreso de un espacio en blanco al comienzo, ni de dígitos o caracteres especiales.")
     private String afiliacionSalud;
 
-
     @Column(name = "estado_civil")
     @Size(max = 100, message = "El estado civil del paciente debe contener un máximo de 100 caracteres.")
     private String estadoCivil;
-
 
     @Column(name = "familia_nuclear")
     @Size(max = 1000, message = "Solo se permite un máximo de 1000 caracteres para la descripción de la familia nuclear del paciente")
@@ -85,7 +83,6 @@ public class Paciente implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_ficha")
     private FichaTratamiento fichaTratamiento;
-
 
     public Paciente() {
         this.atenciones = new ArrayList<>();

@@ -68,14 +68,14 @@ public class APICustomExceptionHandler extends ResponseEntityExceptionHandler  {
         return new ResponseEntity<>(exception, conflict);
     }
 
-    @ExceptionHandler(value = {PatientNotFoundException.class})
-    public ResponseEntity<Object> handlePatientNotFoundException(PatientNotFoundException ex) {
+    @ExceptionHandler(value = {ResourceNotFoundException.class})
+    public ResponseEntity<Object> handlePatientNotFoundException(ResourceNotFoundException ex) {
         APICustomException exception = new APICustomException(ex.getMessage(), notFound);
         return new ResponseEntity<>(exception, notFound);
     }
 
-    @ExceptionHandler(value = {MissingIdException.class})
-    public ResponseEntity<Object> handleMissingIdException(MissingIdException ex) {
+    @ExceptionHandler(value = {InvalidIdException.class})
+    public ResponseEntity<Object> handleMissingIdException(InvalidIdException ex) {
         APICustomException exception = new APICustomException(ex.getMessage(), badRequest);
         return new ResponseEntity<>(exception, badRequest);
     }
@@ -88,6 +88,12 @@ public class APICustomExceptionHandler extends ResponseEntityExceptionHandler  {
 
     @ExceptionHandler(value = {ResourceDeletionNotPossibleException.class})
     public ResponseEntity<Object> handleResourceDeletionNotPossibleException(ResourceDeletionNotPossibleException ex) {
+        APICustomException exception = new APICustomException(ex.getMessage(), badRequest);
+        return new ResponseEntity<>(exception, badRequest);
+    }
+
+    @ExceptionHandler(value = {InvalidParameterException.class})
+    public ResponseEntity<Object> handleInvalidParameterException(InvalidParameterException ex) {
         APICustomException exception = new APICustomException(ex.getMessage(), badRequest);
         return new ResponseEntity<>(exception, badRequest);
     }

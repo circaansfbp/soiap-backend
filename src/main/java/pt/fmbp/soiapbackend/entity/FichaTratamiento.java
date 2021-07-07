@@ -1,8 +1,6 @@
 package pt.fmbp.soiapbackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -21,7 +19,6 @@ public class FichaTratamiento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_ficha", nullable = false, updatable = false)
     private Long idFichaTratamiento;
-
 
     @NotEmpty
     @Size(max = 2000)

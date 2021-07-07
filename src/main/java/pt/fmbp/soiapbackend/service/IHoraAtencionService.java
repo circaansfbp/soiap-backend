@@ -1,13 +1,10 @@
 package pt.fmbp.soiapbackend.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
 
 import javax.mail.MessagingException;
 import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public interface IHoraAtencionService {

@@ -21,16 +21,16 @@ public interface IPacienteService {
     Paciente savePaciente(Paciente paciente);
 
     // Buscar paciente(s) por nombre entre todos los pacientes (activos e inactivos), paginados
-    Page<Paciente> getPacientesByName(String name, Pageable pageable);
+    //Page<Paciente> getPacientesByName(String name, Pageable pageable);
 
     // Buscar paciente(s) por apellido entre todos los pacientes (activos e inactivos), paginados
-    Page<Paciente> getPacientesByLastname(String apellido, Pageable pageable);
+    //Page<Paciente> getPacientesByLastname(String apellido, Pageable pageable);
 
     // Buscar paciente(s) por nombre y apellido entre todos los pacientes (activos e inactivos), paginados
-    Page<Paciente> getPacientesByNameAndLastname(String nombre, String apellido, Pageable pageable);
+    //Page<Paciente> getPacientesByNameAndLastname(String nombre, String apellido, Pageable pageable);
 
     // Obtener todos los pacientes paginados
-    Page<Paciente> getPacientes(Pageable pageable);
+    //Page<Paciente> getPacientes(Pageable pageable);
 
     // Obtener lista de pacientes activos por su nombre (sin paginar)
     List<Paciente> getPacientesActivosPorNombreSinPaginar(String name);

@@ -114,7 +114,6 @@ public class HoraAtencionService implements IHoraAtencionService {
         else
             appointmentsToNotify = getHorasPorFecha(today.plusDays(3));
 
-
         if (!appointmentsToNotify.isEmpty()) {
             this.emailNotificationService
                     .sendEmailNotification(appointmentsToNotify);

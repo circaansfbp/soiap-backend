@@ -45,7 +45,7 @@ public class PacienteService implements IPacienteService {
     }
 
     // Buscar paciente(s) por nombre entre todos los pacientes (activos e inactivos), paginados
-    @Override
+    /*@Override
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientesByName(String name, Pageable pageable) {
         if (name != null) return pacienteRepository.findAllByNombreContaining(name, pageable);
@@ -70,7 +70,7 @@ public class PacienteService implements IPacienteService {
         }
         else
             return null;
-    }
+    }*/
 
     // Obtener uno o más pacientes activos por nombre, sin paginar
     @Override
@@ -136,11 +136,11 @@ public class PacienteService implements IPacienteService {
     }
 
     // Obtener todos los pacientes, paginados
-    @Override
+    /*@Override
     @Transactional(readOnly = true)
     public Page<Paciente> getPacientes(Pageable pageable) {
         return pacienteRepository.findAll(pageable);
-    }
+    }*/
 
     // Actualizar un paciente
     @Override

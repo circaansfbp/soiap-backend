@@ -3,14 +3,11 @@ package pt.fmbp.soiapbackend.service.jpa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
 import pt.fmbp.soiapbackend.service.IEmailNotificationService;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,7 +22,7 @@ public class EmailNotificationService implements IEmailNotificationService {
             if (horaAtencion.getPaciente().getEmail() != null && horaAtencion.getPaciente().getEmail() != " ") {
                 SimpleMailMessage msg = new SimpleMailMessage();
 
-                msg.setFrom("");
+                msg.setFrom("pt.fmbp.soiap2021@gmail.com");
                 msg.setTo(horaAtencion.getPaciente().getEmail());
                 msg.setSubject("Recordatorio hora de atención psicológica.");
                 msg.setText(

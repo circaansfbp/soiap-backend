@@ -17,15 +17,15 @@ public interface IPacienteRepository extends JpaRepository<Paciente, Long> {
 
     // Obtiene todos los pacientes por nombre, paginados
     // SELECT * FROM paciente WHERE nombre LIKE = %?% (Pacientes paginados)
-    Page<Paciente> findAllByNombreContaining(String nombre, Pageable pageable);
+    //Page<Paciente> findAllByNombreContaining(String nombre, Pageable pageable);
 
     // Obtiene todos los pacientes por apellido, paginados
     // SELECT * FROM paciente WHERE apellido LIKE = %?%
-    Page<Paciente> findAllByApellidoContaining(String apellido, Pageable pageable);
+    //Page<Paciente> findAllByApellidoContaining(String apellido, Pageable pageable);
 
     // Obtiene todos los pacientes por nombre y apellido, paginados
     // SELECT * FROM paciente WHERE nombre LIKE = %?% AND apellido LIKE = %?%
-    Page<Paciente> findAllByNombreContainingAndApellidoContaining(String nombre, String apellido, Pageable pageable);
+    //Page<Paciente> findAllByNombreContainingAndApellidoContaining(String nombre, String apellido, Pageable pageable);
 
     // Obtiene los pacientes activos por nombre, sin paginar
     // SELECT * FROM paciente WHERE nombre LIKE = %?% (Pacientes sin paginar)

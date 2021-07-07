@@ -9,8 +9,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import pt.fmbp.soiapbackend.entity.Paciente;
-import pt.fmbp.soiapbackend.exception.MissingIdException;
-import pt.fmbp.soiapbackend.exception.PatientNotFoundException;
+import pt.fmbp.soiapbackend.exception.InvalidIdException;
+import pt.fmbp.soiapbackend.exception.InvalidParameterException;
+import pt.fmbp.soiapbackend.exception.ResourceNotFoundException;
 import pt.fmbp.soiapbackend.service.IPacienteService;
 
 import javax.validation.Valid;
@@ -31,20 +32,22 @@ public class PacienteController {
             Paciente patientToCreate = pacienteService.savePaciente(paciente);
             return new ResponseEntity<>(patientToCreate, HttpStatus.CREATED);
         } else
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     // Obtener un paciente por su ID
     @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/{idPaciente}")
     public ResponseEntity<Paciente> getPaciente (@PathVariable(value = "idPaciente") Long idPaciente) {
+        if (idPaciente == null || idPaciente == 0) throw new InvalidIdException("El ID del paciente ingresado no es válido.");
+
         Paciente patientToReturn  = pacienteService.getPacienteById(idPaciente);
 
         if (patientToReturn != null) {
             return new ResponseEntity<>(patientToReturn, HttpStatus.OK);
         }
         else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("No se ha encontrado un paciente con el ID ingresado.");
     }
 
     // Obtener todos los pacientes activos, paginados
@@ -55,7 +58,7 @@ public class PacienteController {
 
         if (!pageOfPatients.isEmpty()) return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
         else
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new InvalidParameterException("El número de página proporcionado no es válido.");
     }
 
     // Obtener todos los pacientes inactivos, paginados
@@ -66,11 +69,11 @@ public class PacienteController {
 
         if (!inactivePatients.isEmpty()) return new ResponseEntity<>(inactivePatients, HttpStatus.OK);
         else
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            throw new InvalidParameterException("El número de página proporcionado no es válido.");
     }
 
     // Buscar pacientes por nombre entre todos los pacientes (activos e inactivos), paginados
-    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
+    /*@Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/all/by-name/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> searchInAllPatientsByName(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                     @RequestParam String nombre) {
@@ -103,13 +106,15 @@ public class PacienteController {
         if (!pageOfPatients.isEmpty()) return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    }*/
 
     // Obtener uno o más pacientes activos, por nombre, paginados
     @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-name/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesPorNombre (@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                 @RequestParam String nombre) {
+        if (nombre == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         Page pageOfPatientsNamed = pacienteService.getPacientesByNameAndEstado("Activo", nombre, PageRequest.of(nroPagina, 5));
 
         if (!pageOfPatientsNamed.isEmpty()) return new ResponseEntity<>(pageOfPatientsNamed, HttpStatus.OK);
@@ -121,6 +126,8 @@ public class PacienteController {
     @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-name")
     public ResponseEntity<List<Paciente>> getPacientesPorNombreSinPaginar (@RequestParam String nombre) {
+        if (nombre == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         List patientsNamed = pacienteService.getPacientesActivosPorNombreSinPaginar(nombre);
 
         if (!patientsNamed.isEmpty()) return new ResponseEntity<>(patientsNamed, HttpStatus.OK);
@@ -133,6 +140,8 @@ public class PacienteController {
     @GetMapping("/get/inactive/by-name/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesInactivosPorNombre(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                          @RequestParam String nombre) {
+        if (nombre == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         Page pageOfPatients = pacienteService.getPacientesByNameAndEstado("Inactivo", nombre, PageRequest.of(nroPagina, 5));
 
         if (!pageOfPatients.isEmpty()) return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
@@ -145,6 +154,8 @@ public class PacienteController {
     @GetMapping("/get/inactive/by-lastname/page/{pageNumber}")
     public ResponseEntity<Page<Paciente>> getPacientesInactivosPorApellido(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                            @RequestParam String apellido) {
+        if (apellido == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         Page pageOfPatients = pacienteService.getPacientesPorApellidoAndEstado("Inactivo", apellido, PageRequest.of(nroPagina, 5));
 
         if(!pageOfPatients.isEmpty()) return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
@@ -158,6 +169,8 @@ public class PacienteController {
     public ResponseEntity<Page<Paciente>> getPacientesInactivosPorNombreApellido(@PathVariable(value = "pageNumber") Integer nroPagina,
                                                                                  @RequestParam String nombre,
                                                                                  @RequestParam String apellido) {
+        if (nombre == null || apellido == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         Page pageOfPatienes = pacienteService.getPacientesPorNombreApellidoAndEstado("Inactivo", nombre, apellido,
                 PageRequest.of(nroPagina, 5));
 
@@ -232,6 +245,8 @@ public class PacienteController {
     @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @PutMapping("/update/{idPaciente}")
     public ResponseEntity<Paciente> updatePaciente (@Valid @RequestBody Paciente paciente, @PathVariable (value = "idPaciente") Long idPaciente) {
+        if (idPaciente == null || idPaciente == 0) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         Paciente updatedPatient = pacienteService.updatePaciente(paciente, idPaciente);
 
         if (updatedPatient == null) {
@@ -245,23 +260,25 @@ public class PacienteController {
     @PutMapping("delete/{idPaciente}")
     public ResponseEntity<Paciente> deletePaciente(@PathVariable(value = "idPaciente") Long idPaciente) {
         if (idPaciente == null || idPaciente == 0) {
-            throw new MissingIdException("Se debe ingresar un identificador válido.");
+            throw new InvalidIdException("Se debe ingresar un identificador válido.");
         }
 
         Paciente patientToDelete = pacienteService.deletePaciente(idPaciente);
 
         if (patientToDelete != null) return new ResponseEntity<>(patientToDelete, HttpStatus.OK);
         else
-            throw new PatientNotFoundException("El identificador del paciente ingresado no se encuentra registrado en el sistema.");
+            throw new ResourceNotFoundException("El identificador del paciente ingresado no se encuentra registrado en el sistema.");
     }
 
     // Reintegrar un paciente a la consulta (de INACTIVO a ACTIVO)
     @Secured("ROLE_PSICOLOGO_TRATANTE")
     @PutMapping("integrate/{idPaciente}")
     public ResponseEntity<Paciente> reintegrarPaciente(@PathVariable(value = "idPaciente") Long idPaciente) {
+        if (idPaciente == null || idPaciente == 0) throw new InvalidIdException("Se debe ingresar un identificador válido.");
+
         Paciente pacienteToIntegrate = pacienteService.reintegrarPaciente(idPaciente);
 
-        if (pacienteToIntegrate == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (pacienteToIntegrate == null) throw new ResourceNotFoundException("El identificador del paciente ingresado no se encuentra registrado en el sistema.");
 
         return new ResponseEntity<>(pacienteToIntegrate, HttpStatus.OK);
     }
