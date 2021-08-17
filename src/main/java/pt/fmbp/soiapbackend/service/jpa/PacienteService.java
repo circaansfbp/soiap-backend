@@ -13,6 +13,7 @@ import pt.fmbp.soiapbackend.exception.ResourceDeletionNotPossibleException;
 import pt.fmbp.soiapbackend.repository.IPacienteRepository;
 import pt.fmbp.soiapbackend.service.IPacienteService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,86 +45,30 @@ public class PacienteService implements IPacienteService {
         return pacienteRepository.findAllByEstado("Inactivo", pageable);
     }
 
-    // Buscar paciente(s) por nombre entre todos los pacientes (activos e inactivos), paginados
-    /*@Override
+    // Obtener uno o más pacientes por nombre y estado, sin paginar
+    @Override
     @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesByName(String name, Pageable pageable) {
-        if (name != null) return pacienteRepository.findAllByNombreContaining(name, pageable);
+    public List<Paciente> getPacientesPorEstadoPorNombreSinPaginar(String estado, String name) {
+        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining(estado, name);
         else
             return null;
     }
 
-    // Buscar paciente(s) por apellido entre todos los pacientes (activos e inactivos), paginados
+    // Obtener uno o más pacientes por apellido y estado, sin paginar
     @Override
     @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesByLastname(String apellido, Pageable pageable) {
-        if (apellido != null) return pacienteRepository.findAllByApellidoContaining(apellido, pageable);
+    public List<Paciente> getPacientesPorEstadoPorApellidoSinPaginar(String estado, String apellido) {
+        if (apellido != null) return pacienteRepository.findAllByEstadoAndApellidoContaining(estado, apellido);
         else
             return null;
     }
 
-    // Buscar paciente(s) por nombre y apellido entre todos los pacientes (activos e inactivos), paginados
-    @Override
-    public Page<Paciente> getPacientesByNameAndLastname(String nombre, String apellido, Pageable pageable) {
-        if (nombre != null && apellido != null) {
-            return pacienteRepository.findAllByNombreContainingAndApellidoContaining(nombre, apellido, pageable);
-        }
-        else
-            return null;
-    }*/
-
-    // Obtener uno o más pacientes activos por nombre, sin paginar
+    // Obtener uno o más pacientes por su nombre, apellido y estado, sin paginar
     @Override
     @Transactional(readOnly = true)
-    public List<Paciente> getPacientesActivosPorNombreSinPaginar(String name) {
-        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining("Activo", name);
-        else
-            return null;
-    }
-
-    // Obtener uno o más pacientes por nombre y estado, paginados
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesByNameAndEstado(String estado, String name, Pageable pageable) {
-        if (name != null) return pacienteRepository.findAllByEstadoAndNombreContaining(estado, name, pageable);
-        else
-            return null;
-    }
-
-    // Obtener uno o más pacientes activos por su apellido, sin paginar
-    @Override
-    @Transactional(readOnly = true)
-    public List<Paciente> getPacientesActivosPorApellidoSinPaginar(String apellido) {
-        if (apellido != null) return pacienteRepository.findAllByEstadoAndApellidoContaining("Activo", apellido);
-        else
-            return null;
-    }
-
-    // Obtener uno o más pacientes por su apellido y estado, paginados
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesPorApellidoAndEstado(String estado, String apellido, Pageable pageable) {
-        if (apellido != null) return pacienteRepository.findAllByEstadoAndApellidoContaining(estado, apellido, pageable);
-        else
-            return null;
-    }
-
-    // Obtener uno o más pacientes activos por su nombre y apellido, sin paginar
-    @Override
-    @Transactional(readOnly = true)
-    public List<Paciente> getPacientesActivosPorNombreApellidoSinPaginar(String nombre, String apellido) {
+    public List<Paciente> getPacientesPorEstadoPorNombreApellidoSinPaginar(String estado, String nombre, String apellido) {
         if (nombre != null && apellido != null) return pacienteRepository.
-                findAllByEstadoAndNombreContainingAndApellidoContaining("Activo", nombre, apellido);
-        else
-            return null;
-    }
-
-    // Obtener uno o más pacientes por su nombre, apellido y estado, paginados
-    @Override
-    @Transactional(readOnly = true)
-    public Page<Paciente> getPacientesPorNombreApellidoAndEstado(String estado, String nombre, String apellido, Pageable pageable) {
-        if (nombre != null && apellido != null) return pacienteRepository.
-                findAllByEstadoAndNombreContainingAndApellidoContaining(estado, nombre, apellido, pageable);
+                findAllByEstadoAndNombreContainingAndApellidoContaining(estado, nombre, apellido);
         else
             return null;
     }
@@ -134,13 +79,6 @@ public class PacienteService implements IPacienteService {
     public Paciente getPacienteById(Long idPaciente) {
         return pacienteRepository.findById(idPaciente).orElse(null);
     }
-
-    // Obtener todos los pacientes, paginados
-    /*@Override
-    @Transactional(readOnly = true)
-    public Page<Paciente> getPacientes(Pageable pageable) {
-        return pacienteRepository.findAll(pageable);
-    }*/
 
     // Actualizar un paciente
     @Override
@@ -223,7 +161,7 @@ public class PacienteService implements IPacienteService {
 
         if (!patientToDelete.getAtenciones().isEmpty()) {
             for (HoraAtencion atencion : patientToDelete.getAtenciones()) {
-                if (atencion.getPago() == null) {
+                if (atencion.getPago() == null && atencion.getFechaAtencion().isBefore(LocalDate.now()) && atencion.getAsistencia() == 1) {
                     throw new ResourceDeletionNotPossibleException("El paciente no puede ser eliminado. Presenta atenciones impagadas");
                 }
             }

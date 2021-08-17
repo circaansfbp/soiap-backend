@@ -5,6 +5,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pt.fmbp.soiapbackend.entity.HoraAtencion;
+import pt.fmbp.soiapbackend.exception.AppointmentConflictException;
+import pt.fmbp.soiapbackend.exception.ResourceDeletionNotPossibleException;
 import pt.fmbp.soiapbackend.repository.IHoraAtencionRepository;
 import pt.fmbp.soiapbackend.service.IEmailNotificationService;
 import pt.fmbp.soiapbackend.service.IHoraAtencionService;
@@ -59,46 +61,66 @@ public class HoraAtencionService implements IHoraAtencionService {
     // Actualizar una hora de atención
     @Override
     @Transactional
-    public HoraAtencion updateHoraAtencion (HoraAtencion horaAtencion, Long idAtencion) {
+    public HoraAtencion updateHoraAtencion(HoraAtencion horaAtencion, Long idAtencion) {
         HoraAtencion hourToUpdate = getHoraAtencion(idAtencion);
+        List<HoraAtencion> horasExistentes;
 
-        try {
-            // Actualiza asistencia
-            if (hourToUpdate.getAsistencia() != horaAtencion.getAsistencia()) hourToUpdate.setAsistencia(horaAtencion.getAsistencia());
+        // Actualiza asistencia
+        if (hourToUpdate.getAsistencia() != horaAtencion.getAsistencia())
+            hourToUpdate.setAsistencia(horaAtencion.getAsistencia());
 
-            // Actualiza confirmación de la asistencia
-            if (hourToUpdate.getConfirmaAsistencia() != horaAtencion.getConfirmaAsistencia()) hourToUpdate.setConfirmaAsistencia(
+        // Actualiza confirmación de la asistencia
+        if (hourToUpdate.getConfirmaAsistencia() != horaAtencion.getConfirmaAsistencia())
+            hourToUpdate.setConfirmaAsistencia(
                     horaAtencion.getConfirmaAsistencia()
             );
 
-            // Actualiza hora de la atención
-            if (hourToUpdate.getHoraAtencion() != horaAtencion.getHoraAtencion()) hourToUpdate.setHoraAtencion(
-                    horaAtencion.getHoraAtencion()
-            );
+        // Actualiza fecha y hora de la atención
+        if (!hourToUpdate.getHoraAtencion().equals(horaAtencion.getHoraAtencion()) || !hourToUpdate.getFechaAtencion().equals(horaAtencion.getFechaAtencion())) {
+            horasExistentes = getHorasPorFecha(horaAtencion.getFechaAtencion());
 
-            // Actualizar la fecha de la atención
-            if (hourToUpdate.getFechaAtencion() != horaAtencion.getFechaAtencion()) hourToUpdate.setFechaAtencion(
-                    horaAtencion.getFechaAtencion()
-            );
+            if (!horasExistentes.isEmpty()) {
+                for (HoraAtencion horario : horasExistentes) {
+                    System.out.println("Hora horario existente: " + horario.getHoraAtencion());
+                    System.out.println("Hora horario que se desea actualizar: " + horaAtencion.getHoraAtencion());
+                    if (horario.getHoraAtencion().equals(horaAtencion.getHoraAtencion())) {
+                        System.out.println("Entré al if.");
+                        return null;
+                    }
+                }
+            }
 
-            // Actualizar el número de la sesión
-            if (hourToUpdate.getNroConsulta() != horaAtencion.getNroConsulta()) hourToUpdate.setNroConsulta(
-                    horaAtencion.getNroConsulta()
-            );
-
-            // Actualizar el pago de una hora de atención
-            if (hourToUpdate.getPago() != horaAtencion.getPago()) hourToUpdate.setPago(horaAtencion.getPago());
-
-            horaAtencionRepository.save(hourToUpdate);
-            return hourToUpdate;
+            hourToUpdate.setHoraAtencion(horaAtencion.getHoraAtencion());
+            hourToUpdate.setFechaAtencion(horaAtencion.getFechaAtencion());
         }
-        catch (NullPointerException e) { return null; }
+
+        // Actualizar el número de la sesión
+        if (hourToUpdate.getNroConsulta() != horaAtencion.getNroConsulta()) hourToUpdate.setNroConsulta(
+                horaAtencion.getNroConsulta()
+        );
+
+        // Actualizar el pago de una hora de atención
+        if (hourToUpdate.getPago() != horaAtencion.getPago()) hourToUpdate.setPago(horaAtencion.getPago());
+
+        horaAtencionRepository.save(hourToUpdate);
+        return hourToUpdate;
     }
 
     // Eliminar una hora de atención (ELIMINACIÓN FÍSICA)
     @Override
     @Transactional
     public void deleteHoraAtencion(Long idAtencion) {
+
+        HoraAtencion hourToDelete = getHoraAtencion(idAtencion);
+        if (hourToDelete.getPago() != null)
+            throw new ResourceDeletionNotPossibleException("El horario de atención fue pagado, por lo que no es posible eliminarlo.");
+
+        if (hourToDelete.getAsistencia() != 0)
+            throw new ResourceDeletionNotPossibleException("No es posible eliminar el horario, ya que su asistencia ya fue registrada");
+
+        if (hourToDelete.getFechaAtencion().isBefore(LocalDate.now()))
+            throw new ResourceDeletionNotPossibleException("No es posible eliminar un horario con fecha ya pasada.");
+
         horaAtencionRepository.deleteById(idAtencion);
     }
 

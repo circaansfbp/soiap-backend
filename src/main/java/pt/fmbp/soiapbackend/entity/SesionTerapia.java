@@ -3,9 +3,7 @@ package pt.fmbp.soiapbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -19,23 +17,24 @@ public class SesionTerapia implements Serializable {
     @Column(name = "id_sesion", nullable = false, updatable = false)
     private Long idSesion;
 
+    @Min(1)
+    @Max(8)
     @Column(name = "nro_sesion")
     private int nroSesion;
 
-    @NotNull
     @Column(name = "fecha_sesion")
     private LocalDate fechaSesion;
 
-    @NotEmpty(message = "Las observaciones no pueden estar vacías")
-    @Size(max = 3000)
+    @NotEmpty(message = "Se deben ingresar las observaciones de la sesión.")
+    @NotBlank(message = "Las observaciones no pueden quedar en blanco.")
+    @Size(max = 3000, message = "Las observaciones de la sesión pueden contener un máximo de 3000 caracteres.")
     private String observaciones;
 
-    @NotEmpty
     @Column(nullable = false)
     private String estado;
 
     @JsonIgnoreProperties({"sesionesDeTerapia", "hibernateLazyInitializer", "handler"})
-    @NotNull
+    @NotNull(message = "La sesión de terapia debe estar asociada a una ficha de tratamiento.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_ficha")
     private FichaTratamiento fichaTratamiento;

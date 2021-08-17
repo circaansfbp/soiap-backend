@@ -5,6 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -46,7 +47,6 @@ public class HoraAtencion implements Serializable {
     private int nroConsulta;
 
     @JsonIgnoreProperties({"atenciones", "hibernateLazyInitializer", "handler"})
-    @NotNull(message = "Se debe asociar un paciente al horario de atención.")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_paciente")
     private Paciente paciente;

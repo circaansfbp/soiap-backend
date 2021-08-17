@@ -3,6 +3,7 @@ package pt.fmbp.soiapbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,29 +20,30 @@ public class Anamnesis implements Serializable {
     @Column(name = "id_anamnesis", nullable = false, updatable = false)
     private Long idAnamnesis;
 
-    @NotNull
     @Column(name = "fecha_anamnesis")
     private LocalDate fechaAnamnesis;
 
-    @NotEmpty
-    @Size(max = 2000)
+    @NotEmpty(message = "Se debe ingresar el motivo de la consulta.")
+    @NotBlank(message = "El motivo de la consulta no puede quedar en blanco.")
+    @Size(max = 2000, message = "Solo se permite un máximo de 2000 caracteres para el motivo de la consulta.")
     @Column(name = "motivo_consulta_paciente")
     private String motivoConsultaPaciente;
 
-    @NotEmpty
-    @Size(max = 2000)
+    @NotEmpty(message = "Se deben ingresar los antecedentes del paciente.")
+    @NotBlank(message = "Los antecedentes del paciente no pueden quedar en blanco.")
+    @Size(max = 2000, message = "Solo se permite un máximo de 2000 caracteres para los antecedentes del paciente.")
     @Column(name = "antecedentes_paciente")
     private String antecedentesPaciente;
 
-    @NotEmpty
-    @Size(max = 2000)
+    @NotEmpty(message = "Se deben ingresar los antecedentes familiares del paciente.")
+    @NotBlank(message = "Los antecedentes familiares del paciente no pueden quedar en blanco.")
+    @Size(max = 2000, message = "Solo se permite un máximo de 2000 caracteres para los antecedentes familiares del paciente.")
     @Column(name = "antecedentes_familiares")
     private String antecedentesFamiliares;
 
-    @Size(max = 2000)
+    @Size(max = 2000, message = "Solo se permite un máximo de 2000 caracteres para las observaciones de la anamnesis.")
     private String observaciones;
 
-    @NotEmpty
     @Size(max = 15)
     private String estado;
 

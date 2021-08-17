@@ -27,7 +27,7 @@ public class EmailNotificationService implements IEmailNotificationService {
                 msg.setSubject("Recordatorio hora de atención psicológica.");
                 msg.setText(
                         "Hola " + horaAtencion.getPaciente().getNombre() + " " + horaAtencion.getPaciente().getApellido() + ".\n\n" +
-                                "Le recordamos que mañana " +
+                                "Le recordamos que el día " +
                                 horaAtencion.getFechaAtencion().toString() + " a las " + horaAtencion.getHoraAtencion().toString() +
                                 " hrs. usted tiene un horario de atención psicológico agendado. Por favor, procure llegar a tiempo a su cita.\n\n" +
                                 "Le saluda atentamente,\n" +
@@ -38,7 +38,6 @@ public class EmailNotificationService implements IEmailNotificationService {
                 );
 
                 mailSender.send(msg);
-                System.out.println("Message sent!");
             }
         }
     }

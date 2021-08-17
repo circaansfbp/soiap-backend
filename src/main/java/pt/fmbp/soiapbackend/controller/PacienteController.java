@@ -72,127 +72,58 @@ public class PacienteController {
             throw new InvalidParameterException("El número de página proporcionado no es válido.");
     }
 
-    // Buscar pacientes por nombre entre todos los pacientes (activos e inactivos), paginados
-    /*@Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
-    @GetMapping("/get/all/by-name/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> searchInAllPatientsByName(@PathVariable(value = "pageNumber") Integer nroPagina,
-                                                                    @RequestParam String nombre) {
-        Page pageOfPatientsNamed = pacienteService.getPacientesByName(nombre, PageRequest.of(nroPagina, 5));
-
-        if (!pageOfPatientsNamed.isEmpty()) return new ResponseEntity<>(pageOfPatientsNamed, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    // Buscar pacientes por apellido entre todos los pacientes (activos e inactivos), paginados
-    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
-    @GetMapping("/get/all/by-lastname/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> searchInAllPatientsByLastname(@PathVariable(value = "pageNumber") Integer nroPagina,
-                                                                        @RequestParam String apellido) {
-        Page pageOfPatientsWithLastname = pacienteService.getPacientesByLastname(apellido, PageRequest.of(nroPagina, 5));
-
-        if(!pageOfPatientsWithLastname.isEmpty()) return new ResponseEntity<>(pageOfPatientsWithLastname, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    // Buscar pacientes por nombre y apellido entre todos los pacientes (activos e inactivos), paginados
-    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
-    @GetMapping("/get/all/by-name-lastname/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> searchInAllPatientsByNameAndLastname(@PathVariable(value = "pageNumber") Integer nroPagina,
-                                                                               @RequestParam String nombre, @RequestParam String apellido) {
-        Page pageOfPatients = pacienteService.getPacientesByNameAndLastname(nombre, apellido, PageRequest.of(nroPagina, 5));
-
-        if (!pageOfPatients.isEmpty()) return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }*/
-
-    // Obtener uno o más pacientes activos, por nombre, paginados
-    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
-    @GetMapping("/get/by-name/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> getPacientesPorNombre (@PathVariable(value = "pageNumber") Integer nroPagina,
-                                                                @RequestParam String nombre) {
-        if (nombre == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        Page pageOfPatientsNamed = pacienteService.getPacientesByNameAndEstado("Activo", nombre, PageRequest.of(nroPagina, 5));
-
-        if (!pageOfPatientsNamed.isEmpty()) return new ResponseEntity<>(pageOfPatientsNamed, HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
     // Obtener uno o más pacientes activos, por nombre, sin paginar
     @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
     @GetMapping("/get/by-name")
     public ResponseEntity<List<Paciente>> getPacientesPorNombreSinPaginar (@RequestParam String nombre) {
-        if (nombre == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (nombre == null) throw new InvalidParameterException("Se debe ingresar el nombre del paciente.");
 
-        List patientsNamed = pacienteService.getPacientesActivosPorNombreSinPaginar(nombre);
+        List patientsNamed = pacienteService.getPacientesPorEstadoPorNombreSinPaginar("Activo", nombre);
 
         if (!patientsNamed.isEmpty()) return new ResponseEntity<>(patientsNamed, HttpStatus.OK);
         else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("No se ha encontrado un paciente con el nombre ingresado.");
     }
 
-    // Obtener uno o más pacientes inactivos, por nombre, paginados
+    // Obtener uno o más pacientes inactivos, por nombre, sin paginar
     @Secured("ROLE_PSICOLOGO_TRATANTE")
-    @GetMapping("/get/inactive/by-name/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> getPacientesInactivosPorNombre(@PathVariable(value = "pageNumber") Integer nroPagina,
-                                                                         @RequestParam String nombre) {
-        if (nombre == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @GetMapping("/get/inactive/by-name")
+    public ResponseEntity<List<Paciente>> getPacientesInactivosPorNombre(@RequestParam String nombre) {
 
-        Page pageOfPatients = pacienteService.getPacientesByNameAndEstado("Inactivo", nombre, PageRequest.of(nroPagina, 5));
+        if (nombre == null) throw new InvalidParameterException("Se debe ingresar el nombre del paciente.");
 
-        if (!pageOfPatients.isEmpty()) return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
+        List inactivePatientsNamed = pacienteService.getPacientesPorEstadoPorNombreSinPaginar("Inactivo", nombre);
+
+        if (!inactivePatientsNamed.isEmpty()) return new ResponseEntity<>(inactivePatientsNamed, HttpStatus.OK);
         else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("No se ha encontrado un paciente con el nombre ingresado.");
     }
 
-    // Obtener uno o más pacientes inactivos, por apellido, paginados
+    // Obtener uno o más pacientes inactivos, por apellido, sin paginar
     @Secured("ROLE_PSICOLOGO_TRATANTE")
-    @GetMapping("/get/inactive/by-lastname/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> getPacientesInactivosPorApellido(@PathVariable(value = "pageNumber") Integer nroPagina,
-                                                                           @RequestParam String apellido) {
-        if (apellido == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @GetMapping("/get/inactive/by-lastname")
+    public ResponseEntity<List<Paciente>> getPacientesInactivosPorApellido(@RequestParam String apellido) {
+        if (apellido == null) throw new InvalidParameterException("Se debe ingresar un apellido.");
 
-        Page pageOfPatients = pacienteService.getPacientesPorApellidoAndEstado("Inactivo", apellido, PageRequest.of(nroPagina, 5));
+        List inactivePatients = pacienteService.getPacientesPorEstadoPorApellidoSinPaginar("Inactivo", apellido);
 
-        if(!pageOfPatients.isEmpty()) return new ResponseEntity<>(pageOfPatients, HttpStatus.OK);
+        if(!inactivePatients.isEmpty()) return new ResponseEntity<>(inactivePatients, HttpStatus.OK);
         else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("No se han encontrado pacientes con el apellido ingresado.");
     }
 
-    // Obtener uno o más pacientes inactivos, por nombre y apellido, paginados
+    // Obtener uno o más pacientes inactivos, por nombre y apellido, sin paginar
     @Secured("ROLE_PSICOLOGO_TRATANTE")
-    @GetMapping("/get/inactive/by-name-lastname/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> getPacientesInactivosPorNombreApellido(@PathVariable(value = "pageNumber") Integer nroPagina,
-                                                                                 @RequestParam String nombre,
+    @GetMapping("/get/inactive/by-name-lastname")
+    public ResponseEntity<List<Paciente>> getPacientesInactivosPorNombreApellido(@RequestParam String nombre,
                                                                                  @RequestParam String apellido) {
-        if (nombre == null || apellido == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (nombre == null || apellido == null) throw new InvalidParameterException("Se debe ingresar el nombre y el apellido.");
 
-        Page pageOfPatienes = pacienteService.getPacientesPorNombreApellidoAndEstado("Inactivo", nombre, apellido,
-                PageRequest.of(nroPagina, 5));
+        List inactivePatients = pacienteService.getPacientesPorEstadoPorNombreApellidoSinPaginar("Inactivo", nombre, apellido);
 
-        if (!pageOfPatienes.isEmpty()) return new ResponseEntity<>(pageOfPatienes, HttpStatus.OK);
+        if (!inactivePatients.isEmpty()) return new ResponseEntity<>(inactivePatients, HttpStatus.OK);
         else
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    // Obtener uno o más pacientes activos, por apellido, paginados
-    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
-    @GetMapping("/get/by-lastname/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> getPacientesPorApellido (@PathVariable(value = "pageNumber") Integer nroPagina,
-                                                                               @RequestParam String apellido) {
-        if (nroPagina != null && apellido != null) {
-            Page pageOfPatientsWhoseLastnameIs = pacienteService.getPacientesPorApellidoAndEstado("Activo", apellido, PageRequest.of(nroPagina, 5));
-
-            if (!pageOfPatientsWhoseLastnameIs.isEmpty()) return new ResponseEntity<>(pageOfPatientsWhoseLastnameIs, HttpStatus.OK);
-            else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new ResourceNotFoundException("No se han encontrado pacientes con el nombre y apellido ingresado.");
     }
 
     // Obtener uno o más pacientes activos, por apellido, sin paginar
@@ -200,30 +131,14 @@ public class PacienteController {
     @GetMapping("/get/by-lastname")
     public ResponseEntity<List<Paciente>> getPacientesPorApellidoSinPaginar (@RequestParam String apellido) {
         if (apellido != null) {
-            List patientsWhoseLastnameIs = pacienteService.getPacientesActivosPorApellidoSinPaginar(apellido);
+            List patientsWhoseLastnameIs = pacienteService.getPacientesPorEstadoPorApellidoSinPaginar("Activo", apellido);
 
             if (!patientsWhoseLastnameIs.isEmpty()) return new ResponseEntity<>(patientsWhoseLastnameIs, HttpStatus.OK);
             else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                throw new ResourceNotFoundException("No se han encontrado pacientes con el apellido ingresado.");
         }
         else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-
-    // Obtener uno o más pacientes activos, por nombre y apellido, paginados
-    @Secured({"ROLE_PSICOLOGO_TRATANTE", "ROLE_COLABORADOR"})
-    @GetMapping("/get/by-name-lastname/page/{pageNumber}")
-    public ResponseEntity<Page<Paciente>> getPacientesPorNombreApellido(@PathVariable(value = "pageNumber") Integer nroPagina, @RequestParam String nombre,
-                                                                        @RequestParam String apellido) {
-        if (nroPagina != null && nombre != null && apellido != null) {
-            Page patientsByNameAndLastname = pacienteService.getPacientesPorNombreApellidoAndEstado("Activo", nombre, apellido, PageRequest.of(nroPagina, 5));
-
-            if (!patientsByNameAndLastname.isEmpty()) return new ResponseEntity<>(patientsByNameAndLastname, HttpStatus.OK);
-            else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new InvalidParameterException("Se debe ingresar un apellido.");
     }
 
     // Obtener uno o más pacientes activos, por nombre y apellido, sin paginar
@@ -231,14 +146,14 @@ public class PacienteController {
     @GetMapping("/get/by-name-lastname")
     public ResponseEntity<List<Paciente>> getPacientesPorNombreApellidoSinPaginar(@RequestParam String nombre, @RequestParam String apellido) {
         if (nombre != null && apellido != null) {
-            List<Paciente> patientsByNameAndLastname = pacienteService.getPacientesActivosPorNombreApellidoSinPaginar(nombre, apellido);
+            List<Paciente> patientsByNameAndLastname = pacienteService.getPacientesPorEstadoPorNombreApellidoSinPaginar("Activo", nombre, apellido);
 
             if (!patientsByNameAndLastname.isEmpty()) return new ResponseEntity<>(patientsByNameAndLastname, HttpStatus.OK);
             else
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                throw new ResourceNotFoundException("No se han encontrado pacientes con el nombre y apellido ingresado.");
         }
         else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new InvalidParameterException("Se debe ingresar el nombre y el apellido.");
     }
 
     // Actualizar los datos de un paciente

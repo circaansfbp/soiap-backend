@@ -33,7 +33,7 @@ public class HoraAtencionController {
 
             // Si la hora y fecha de la atención provista coincide con una ya existente
             if (horaAtencionCreada == null) {
-                throw new AppointmentConflictException("La hora o fecha de la atención ingresada ya se encuentra registrada.");
+                throw new AppointmentConflictException("Ya existe un horario registrado para la fecha y hora ingresada.");
             }
             else
                 return new ResponseEntity<>(horaAtencionCreada, HttpStatus.CREATED);
@@ -74,11 +74,16 @@ public class HoraAtencionController {
     @PutMapping("/update/{idAtencion}")
     public ResponseEntity<HoraAtencion> updateHoraAtencion (@Valid @RequestBody HoraAtencion horaAtencion,
                                                             @PathVariable(value = "idAtencion") Long idAtencion) {
-        HoraAtencion horaAtencionActualizada = horaAtencionService.updateHoraAtencion(horaAtencion, idAtencion);
 
-        if (horaAtencionActualizada == null ) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        else
-            return new ResponseEntity<>(horaAtencionActualizada, HttpStatus.CREATED);
+        if (horaAtencion != null && idAtencion != null && idAtencion != 0) {
+            HoraAtencion horaAtencionActualizada = horaAtencionService.updateHoraAtencion(horaAtencion, idAtencion);
+
+            if (horaAtencionActualizada == null ) throw new AppointmentConflictException("Ya existe un horario registrado para la fecha y hora ingresada.");
+            else
+                return new ResponseEntity<>(horaAtencionActualizada, HttpStatus.CREATED);
+        }
+
+        else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     // Eliminación física de una hora de atención

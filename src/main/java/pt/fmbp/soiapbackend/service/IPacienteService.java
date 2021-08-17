@@ -20,35 +20,14 @@ public interface IPacienteService {
     // Crear un paciente
     Paciente savePaciente(Paciente paciente);
 
-    // Buscar paciente(s) por nombre entre todos los pacientes (activos e inactivos), paginados
-    //Page<Paciente> getPacientesByName(String name, Pageable pageable);
-
-    // Buscar paciente(s) por apellido entre todos los pacientes (activos e inactivos), paginados
-    //Page<Paciente> getPacientesByLastname(String apellido, Pageable pageable);
-
-    // Buscar paciente(s) por nombre y apellido entre todos los pacientes (activos e inactivos), paginados
-    //Page<Paciente> getPacientesByNameAndLastname(String nombre, String apellido, Pageable pageable);
-
-    // Obtener todos los pacientes paginados
-    //Page<Paciente> getPacientes(Pageable pageable);
-
     // Obtener lista de pacientes activos por su nombre (sin paginar)
-    List<Paciente> getPacientesActivosPorNombreSinPaginar(String name);
-
-    // Obtener todos los pacientes activos por su nombre, paginados
-    Page<Paciente> getPacientesByNameAndEstado(String estado, String name, Pageable pageable);
+    List<Paciente> getPacientesPorEstadoPorNombreSinPaginar(String estado, String name);
 
     // Obtener todos los pacientes activos por su apellido, sin paginar
-    List<Paciente> getPacientesActivosPorApellidoSinPaginar(String apellido);
-
-    // Obtener todos los pacientes activos por su apellido, paginados
-    Page<Paciente> getPacientesPorApellidoAndEstado(String estado, String apellido, Pageable pageable);
+    List<Paciente> getPacientesPorEstadoPorApellidoSinPaginar(String estado, String apellido);
 
     // Obtener todos los pacientes activos por nombre y apellido, sin paginar
-    List<Paciente> getPacientesActivosPorNombreApellidoSinPaginar(String nombre, String apellido);
-
-    // Obtener todos los pacientes activos por nombre y apellido, paginados
-    Page<Paciente> getPacientesPorNombreApellidoAndEstado(String estado, String nombre, String apellido, Pageable pageable);
+    List<Paciente> getPacientesPorEstadoPorNombreApellidoSinPaginar(String estado, String nombre, String apellido);
 
     // Actualizar pacientes
     Paciente updatePaciente(Paciente paciente, Long idPaciente);

@@ -3,10 +3,7 @@ package pt.fmbp.soiapbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,6 +32,7 @@ public class Paciente implements Serializable {
     private String apellido;
 
     @NotEmpty(message = "El número de teléfono del paciente no puede estar vacío.")
+    @NotBlank(message = "El teléfono del paciente no puede quedar en blanco.")
     @Size(min = 8, max = 12, message = "El teléfono debe contener un total de 8 caracteres.")
     private String telefono;
 
@@ -50,7 +48,7 @@ public class Paciente implements Serializable {
     @Size(max = 100, message = "La institución a la que pertenece el paciente debe tener un máximo de 100 caracteres.")
     private String institucion;
 
-    @NotEmpty(message = "La afiliación de salud del paciente no puede estar vacía.")
+    @NotEmpty(message = "Se debe ingresar la afiliación de salud del paciente.")
     @Column(name = "afiliacion_salud")
     @Size(max = 100, message = "El nombre de la afiliación de salud del paciente debe contener un máximo de 100 caracteres.")
     @Pattern(regexp = "^(?!\\s)^[0-9a-zA-ZÀ-ÿ\\u00f1\\u00d1\\s]+$",

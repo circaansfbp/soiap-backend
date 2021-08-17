@@ -3,6 +3,7 @@ package pt.fmbp.soiapbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -20,31 +21,34 @@ public class FichaTratamiento implements Serializable {
     @Column(name = "id_ficha", nullable = false, updatable = false)
     private Long idFichaTratamiento;
 
-    @NotEmpty
-    @Size(max = 2000)
+    @NotEmpty(message = "Se debe ingresar el motivo de la consulta.")
+    @NotBlank(message = "El motivo de la consulta no puede quedar en blanco.")
+    @Size(max = 2000, message = "Solo se permite un máximo de 2000 caracteres para el motivo de la consulta.")
     @Column(name = "motivo_consulta_profesional")
     private String motivoConsultaProfesional;
 
-    @NotNull
+
     @Column(name = "fecha_diagnostico")
     private LocalDate fechaDiagnostico;
 
-    @NotEmpty
-    @Size(max = 2000)
+    @NotEmpty(message = "Se debe ingresar el resultado del diagnóstico.")
+    @NotBlank(message = "El resultado del diagnóstico no puede quedar en blanco.")
+    @Size(max = 2000, message = "Solo se permite un máximo de 2000 caracteres para el resultado del diagnóstico.")
     @Column(name = "resultado_diagnostico")
     private String resultadoDiagnostico;
 
-    @NotEmpty
-    @Size(max = 2000)
+    @NotEmpty(message = "Se debe ingresar la sugerencia de tratamiento para el paciente.")
+    @NotBlank(message = "La sugerencia de tratamiento no puede quedar en blanco.")
+    @Size(max = 2000, message = "Solo se permite un máximo de 2000 caracteres para la sugerencia de tratamiento.")
     @Column(name = "sugerencia_tratamiento")
     private String sugerenciaTratamiento;
 
-    @NotEmpty
-    @Size(max = 2000)
+    @NotEmpty(message = "Se deben ingresar los objetivos de la terapia del paciente.")
+    @NotBlank(message = "Los objetivos de la terapia del paciente no pueden quedar en blanco.")
+    @Size(max = 2000, message = "Solo se permite un máximo de 1000 caracteres para los objetivos de la terapia.")
     @Column(name = "objetivos_terapia")
     private String objetivosTerapia;
 
-    @NotEmpty
     @Size(max = 15)
     private String estado;
 
